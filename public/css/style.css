@@ -18,6 +18,10 @@ body {
     padding: 0 20px;
 }
 
+ul {
+    padding: 0;
+}
+
 /* Navigation */
 nav {
     background: linear-gradient(135deg, #2d5016, #4a7c25);
@@ -79,7 +83,7 @@ nav {
                 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%234a7c25" d="M0,100 Q250,50 500,100 T1000,100 L1000,300 L0,300 Z"/></svg>');
     background-size: cover;
     color: white;
-    padding: 80px 0;
+    padding:24px 0;
     text-align: center;
 }
 

@@ -21,7 +21,13 @@
             <ul class="nav-menu">
                 <li><a href="/">Accueil</a></li>
                 <li><a href="/covoiturages">Covoiturages</a></li>
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <li><a href="/profil">Mon compte (<?= htmlspecialchars($_SESSION['user_pseudo']) ?>)</a></li>
+                    <li><a href="/deconnexion">Déconnexion</a></li>
+                <?php else: ?>
                 <li><a href="/connexion">Connexion</a></li>
+                <li><a href="/inscription">Inscription</a></li>
+                <?php endif; ?>
                 <li><a href="/contact">Contact</a></li>
             </ul>
         </div>
@@ -47,6 +53,17 @@
                 </div>
             </div>
         </section>
+
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <section class="welcome-user">
+                <div class="container">
+                    <div class="alert alert-success">
+                        Bienvenue <?= htmlspecialchars($_SESSION['user_pseudo']) ?> ! 
+                        Vous avez <?= isset($_SESSION['user_credits']) ? $_SESSION['user_credits'] : '0' ?> crédits.
+                    </div>
+                </div>
+            </section>
+        <?php endif; ?>
 
         <!-- Section présentation -->
         <section class="presentation">

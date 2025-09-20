@@ -7,8 +7,9 @@
 // Démarrage de la session
 session_start();
 
-// Chargement de la configuration (commenté pour debug)
-// require_once 'config/database.php';
+// Chargement de la configuration
+require_once 'config/database.php';
+require_once 'app/controllers/AuthController.php';
 
 // Récupération de l'URL demandée
 $request = $_SERVER['REQUEST_URI'];
@@ -29,12 +30,28 @@ switch ($path) {
         
     case '/connexion':
         // Page de connexion
-        include 'app/views/auth/login.php';
+        $authController = new AuthController($pdo);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $authController->processLogin();
+        } else {
+            $authController->showLogin();
+        }
         break;
         
     case '/inscription':
         // Page d'inscription
-        include 'app/views/auth/register.php';
+        $authController = new AuthController($pdo);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $authController->processRegister();
+        } else {
+            $authController->showRegister();
+        }
+        break;
+        
+    case '/deconnexion':
+        // Déconnexion
+        $authController = new AuthController($pdo);
+        $authController->logout();
         break;
         
     default:

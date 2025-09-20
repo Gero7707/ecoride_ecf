@@ -93,6 +93,16 @@ CREATE TABLE parametre (
     description TEXT
 );
 
+-- Table pour le rate limiting
+CREATE TABLE security_attempts (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    action VARCHAR(50) NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    success BOOLEAN DEFAULT FALSE,
+    details TEXT,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
 -- Insertion des paramètres de base
 INSERT INTO parametre (cle_param, valeur, description) VALUES
 ('credits_commission', '2', 'Nombre de crédits pris par la plateforme par trajet'),
