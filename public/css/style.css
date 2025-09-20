@@ -34,6 +34,18 @@ nav {
     padding: 0 20px;
 }
 
+#datepicker{
+    background: yellow;
+}
+.logo {
+    width: 96%;
+}
+
+.logo img{
+    height: 3em;
+    margin-right: 0.625em;
+}
+
 .logo h1 {
     color: white;
     font-size: 1.8rem;

@@ -4,14 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EcoRide - Covoiturage Écologique</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>
     <!-- Navigation -->
     <nav>
         <div class="nav-container">
-            <div class="logo">
-                <h1>🌱 EcoRide</h1>
+            <div class="logo d-flex align-items-center justify-content-between">
+                <img src="public/images/logo.png" alt="Logo EcoRide">
+                <h1>EcoRide</h1>
             </div>
             <ul class="nav-menu">
                 <li><a href="/">Accueil</a></li>
@@ -35,7 +40,8 @@
                     <form action="/covoiturages" method="GET">
                         <input type="text" name="depart" placeholder="Ville de départ" required>
                         <input type="text" name="arrivee" placeholder="Ville d'arrivée" required>
-                        <input type="date" name="date" required>
+                        <!-- <input type="date" name="date" required> -->
+                        <input type="text" id="datepicker" class="form-control" placeholder="Choisis une date">
                         <button type="submit">Rechercher</button>
                     </form>
                 </div>
@@ -71,5 +77,15 @@
             <p><a href="/mentions-legales">Mentions légales</a></p>
         </div>
     </footer>
+
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="public/js/main.js"></script>
 </body>
 </html>
