@@ -1,3 +1,6 @@
+#Dossier documentation
+doc/
+
 # Fichiers de configuration sensibles
 config/database.php
 config/secrets.php
