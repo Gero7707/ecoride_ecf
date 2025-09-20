@@ -1,0 +1,51 @@
+# Fichiers de configuration sensibles
+config/database.php
+config/secrets.php
+.env
+
+# Fichiers temporaires et logs
+*.log
+*.tmp
+temp/
+logs/
+
+# Uploads et fichiers utilisateurs
+public/images/uploads/*
+!public/images/uploads/.gitkeep
+
+# Cache et sessions
+cache/
+sessions/
+tmp/
+
+# Fichiers IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Vendor et dépendances (si tu uses Composer plus tard)
+vendor/
+node_modules/
+
+# Fichiers de build
+build/
+dist/
+
+# Backup files
+*.bak
+*.backup
+
+# Fichiers de test locaux
+tests/coverage/
+phpunit.xml
