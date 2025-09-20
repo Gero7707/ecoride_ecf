@@ -35,7 +35,11 @@ nav {
 }
 
 #datepicker{
-    background: yellow;
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e0e0e0;
+    border-radius: 5px;
+    font-size: 1rem;
 }
 .logo {
     width: 96%;
