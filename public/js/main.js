@@ -20,3 +20,19 @@ document.getElementById('confirmer_mot_de_passe').addEventListener('input', func
         this.setCustomValidity('');
     }
 });
+
+// Afficher/masquer les mots de passe
+document.querySelector('.show_passwords').addEventListener('change', function() {
+    const passwordField = document.getElementById('mot_de_passe');
+    const confirmField = document.getElementById('confirmer_mot_de_passe');
+    
+    if (this.checked) {
+        passwordField.type = 'text';
+        confirmField.type = 'text';
+    } else {
+        passwordField.type = 'password';
+        confirmField.type = 'password';
+    }
+});
+
+

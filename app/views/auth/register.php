@@ -46,7 +46,7 @@ require_once 'app/views/includes/head-header.php';
                 </div>
 
                 <div class="form-group">
-                    <label for="mot_de_passe">Mot de passe *</label>
+                    <label for="mot_de_passe">Mot de passe *    <input type="checkbox" class="show_passwords"> 👓</label>
                     <input type="password" id="mot_de_passe" name="mot_de_passe" required 
                             minlength="8">
                     <small>Minimum 8 caractères avec majuscule, chiffre et caractère spécial</small>
