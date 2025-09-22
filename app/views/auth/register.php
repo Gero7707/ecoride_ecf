@@ -1,32 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Inscription - EcoRide</title>
-    <link rel="stylesheet" href="public/css/style.css">
-</head>
-<body>
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
-            <div class="logo">
-                <a href="/"><h1>🌱 EcoRide</h1></a>
-            </div>
-            <ul class="nav-menu">
-                <li><a href="/">Accueil</a></li>
-                <li><a href="/covoiturages">Covoiturages</a></li>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <li><a href="/profil">Mon compte</a></li>
-                    <li><a href="/deconnexion">Déconnexion</a></li>
-                <?php else: ?>
-                    <li><a href="/connexion">Connexion</a></li>
-                    <li><a href="/inscription" class="active">Inscription</a></li>
-                <?php endif; ?>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
+<?php 
+require_once 'app/views/includes/head-header.php';
+?>
 
     <!-- Formulaire d'inscription -->
     <main class="auth-page">
@@ -92,26 +66,6 @@
         </div>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 EcoRide - Contact: contact@ecoride.fr</p>
-            <p><a href="/mentions-legales">Mentions légales</a></p>
-        </div>
-    </footer>
-
-    <script>
-        // Validation côté client pour le mot de passe
-        document.getElementById('confirmer_mot_de_passe').addEventListener('input', function() {
-            const password = document.getElementById('mot_de_passe').value;
-            const confirm = this.value;
-            
-            if (password !== confirm) {
-                this.setCustomValidity('Les mots de passe ne correspondent pas');
-            } else {
-                this.setCustomValidity('');
-            }
-        });
-    </script>
-</body>
-</html>
+<?php 
+require_once 'app/views/includes/footer.php';   
+?>

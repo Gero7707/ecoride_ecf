@@ -1,55 +1,6 @@
-<!DOCTYPE html>
-<html lang="fr">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoRide - Covoiturage Écologique</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-
-    <!-- Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="public/css/style.css">
-</head>
-<body>
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-        <div class="container-fluid">
-            <div class="logo d-flex align-items-center justify-content-between">
-                <img src="public/images/logo.png" alt="Logo EcoRide">
-                <h1>EcoRide</h1>
-            </div>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse " id="navbarNavDropdown">
-                <ul class="navbar-nav ">
-                    <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="/">Accueil</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/covoiturages">Covoiturages</a>
-                    </li>
-                    <?php if (isset($_SESSION['user_id'])): ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/profil">Mon compte (<?= htmlspecialchars($_SESSION['user_pseudo']) ?>)</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/deconnexion">Déconnexion</a>
-                    </li>
-                    <?php else: ?>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/connexion">Connexion</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link" href="/inscription">Inscription</a>
-                        </li>
-                    <?php endif; ?>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
-                    </li>
-                </ul>
-            </div>
-        </div>
-    </nav>
+<?php 
+require_once 'app/views/includes/head-header.php';
+?>
 
     <!-- Page d'accueil -->
     <main>
@@ -105,22 +56,6 @@
         </section>
     </main>
 
-    <!-- Footer -->
-    <footer>
-        <div class="container">
-            <p>&copy; 2025 EcoRide - Contact: contact@ecoride.fr</p>
-            <p><a href="/mentions-legales">Mentions légales</a></p>
-        </div>
-    </footer>
-
-    <!-- jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Datepicker JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="public/js/main.js"></script>
-</body>
-</html>
+<?php 
+require_once 'app/views/includes/footer.php';
+?>
