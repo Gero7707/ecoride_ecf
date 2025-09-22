@@ -23,15 +23,15 @@ ul {
 }
 
 /* Navigation */
-nav {
+nav , footer  {
     background: linear-gradient(135deg, #2d5016, #4a7c25);
     padding: 1rem 0;
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+
 .navbar-nav .nav-item .nav-link {
     color: #ddd !important;
-
 }
 
 
@@ -101,8 +101,25 @@ nav {
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     max-width: 21em;
     margin: 0 auto;
+    color: #666;
 }
 
+.input-group {
+    flex-direction: column;
+    margin-bottom: 1rem;
+    text-align: left;
+}
+
+.search-page {
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
+}
+.search-section, .results-section , .filters-section {
+    padding-top: 2em;
+}
+
+.results-section{
+    padding-bottom: 2em;
+}
 .search-box form {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr auto;
@@ -137,17 +154,18 @@ nav {
     background: #2d5016;
 }
 
+
 /* Section présentation */
 .presentation {
     padding: 60px 0;
-    background: white;
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
 }
 
 .presentation h3 {
     text-align: center;
     font-size: 2rem;
     margin-bottom: 3rem;
-    color: #2d5016;
+    color: #ddd;
 }
 
 .features {
@@ -164,6 +182,10 @@ nav {
     background: #f8f9fa;
     border: 1px solid #e0e0e0;
     transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.feature p {
+    color: #666;
 }
 
 .feature:hover {
@@ -303,7 +325,6 @@ footer {
     color: white;
     text-align: center;
     padding: 2rem 0;
-    margin-top: 3rem;
 }
 
 footer a {

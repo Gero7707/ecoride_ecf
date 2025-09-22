@@ -7,8 +7,8 @@ require_once 'app/views/includes/head-header.php';
         <!-- Section héro -->
         <section class="hero">
             <div class="hero-content">
-                <h2>Voyagez écologique, économique et convivial</h2>
-                <p>EcoRide, la plateforme de covoiturage pour un transport plus vert et plus social.</p>
+                <h2 class="p-3">Voyagez écologique, économique et convivial</h2>
+                <p class="p-2">EcoRide, la plateforme de covoiturage pour un transport plus vert et plus social.</p>
                 
                 <!-- Barre de recherche -->
                 <div class="search-box">
