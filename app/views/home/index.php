@@ -11,25 +11,43 @@
     <link rel="stylesheet" href="public/css/style.css">
 </head>
 <body>
-    <!-- Navigation -->
-    <nav>
-        <div class="nav-container">
+    <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
             <div class="logo d-flex align-items-center justify-content-between">
                 <img src="public/images/logo.png" alt="Logo EcoRide">
                 <h1>EcoRide</h1>
             </div>
-            <ul class="nav-menu">
-                <li><a href="/">Accueil</a></li>
-                <li><a href="/covoiturages">Covoiturages</a></li>
-                <?php if (isset($_SESSION['user_id'])): ?>
-                    <li><a href="/profil">Mon compte (<?= htmlspecialchars($_SESSION['user_pseudo']) ?>)</a></li>
-                    <li><a href="/deconnexion">Déconnexion</a></li>
-                <?php else: ?>
-                <li><a href="/connexion">Connexion</a></li>
-                <li><a href="/inscription">Inscription</a></li>
-                <?php endif; ?>
-                <li><a href="/contact">Contact</a></li>
-            </ul>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse " id="navbarNavDropdown">
+                <ul class="navbar-nav ">
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="/">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/covoiturages">Covoiturages</a>
+                    </li>
+                    <?php if (isset($_SESSION['user_id'])): ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profil">Mon compte (<?= htmlspecialchars($_SESSION['user_pseudo']) ?>)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/deconnexion">Déconnexion</a>
+                    </li>
+                    <?php else: ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/connexion">Connexion</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/inscription">Inscription</a>
+                        </li>
+                    <?php endif; ?>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/contact">Contact</a>
+                    </li>
+                </ul>
+            </div>
         </div>
     </nav>
 
