@@ -4,7 +4,7 @@ require_once 'app/views/includes/head-header.php';
 <main class="search-page">
         <!-- Section de recherche -->
         <section class="search-section">
-            <div class="search-box">
+            <div class="container">
                 <h2>Trouvez votre covoiturage</h2>
                 <p>Recherchez parmi nos trajets écologiques et économiques</p>
                 
@@ -25,10 +25,11 @@ require_once 'app/views/includes/head-header.php';
                         </div>
                         
                         <div class="input-group">
-                            <label for="date">Date de départ</label>
+                            <label for="date">Date de départ (optionnel)</label>
                             <input type="date" id="date" name="date" 
                                     value="<?= isset($_GET['date']) ? htmlspecialchars($_GET['date']) : '' ?>"
-                                    min="<?= date('Y-m-d') ?>" required>
+                                    min="<?= date('Y-m-d') ?>">
+                            <small>Laissez vide pour voir tous les trajets futurs</small>
                         </div>
                         
                         <div class="input-group">
@@ -42,7 +43,7 @@ require_once 'app/views/includes/head-header.php';
         <!-- Section filtres (affichée seulement si recherche effectuée) -->
         <?php if (isset($_GET['depart']) && isset($_GET['arrivee'])): ?>
         <section class="filters-section">
-            <div class="search-box">
+            <div class="container">
                 <h3>Filtrer les résultats</h3>
                 <div class="filters">
                     <div class="filter-group">
@@ -75,7 +76,7 @@ require_once 'app/views/includes/head-header.php';
 
         <!-- Section résultats -->
         <section class="results-section">
-            <div class="search-box">
+            <div class="container">
                 <?php if (isset($_GET['depart']) && isset($_GET['arrivee'])): ?>
                     <?php if (isset($covoiturages) && !empty($covoiturages)): ?>
                         <h3><?= count($covoiturages) ?> trajet(s) trouvé(s)</h3>
@@ -153,16 +154,17 @@ require_once 'app/views/includes/head-header.php';
                         
                         <div class="popular-routes">
                             <h4>Trajets populaires</h4>
-                            <div class="route-links d-flex flex-column gap-2">
-                                <a href="/covoiturages?depart=Paris&arrivee=Lyon&date=<?= date('Y-m-d', strtotime('+1 day')) ?>">Paris → Lyon</a>
-                                <a href="/covoiturages?depart=Lyon&arrivee=Marseille&date=<?= date('Y-m-d', strtotime('+1 day')) ?>">Lyon → Marseille</a>
-                                <a href="/covoiturages?depart=Paris&arrivee=Bordeaux&date=<?= date('Y-m-d', strtotime('+2 days')) ?>">Paris → Bordeaux</a>
+                            <div class="route-links">
+                                <a href="/covoiturages?depart=Paris&arrivee=Lyon">Paris → Lyon</a>
+                                <a href="/covoiturages?depart=Lyon&arrivee=Marseille">Lyon → Marseille</a>
+                                <a href="/covoiturages?depart=Paris&arrivee=Lille">Paris → Lille</a>
                             </div>
                         </div>
                     </div>
                 <?php endif; ?>
             </div>
         </section>
+
     </main>
 
 

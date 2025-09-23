@@ -10,6 +10,7 @@ session_start();
 // Chargement de la configuration
 require_once 'config/database.php';
 require_once 'app/controllers/AuthController.php';
+require_once 'app/controllers/CovoiturageController.php';
 
 // Récupération de l'URL demandée
 $request = $_SERVER['REQUEST_URI'];
@@ -25,7 +26,14 @@ switch ($path) {
         
     case '/covoiturages':
         // Page de recherche de covoiturages
-        include 'app/views/covoiturage/search.php';
+        $covoiturageController = new CovoiturageController($pdo);
+        $covoiturageController->search();
+        break;
+        
+    case (preg_match('/^\/covoiturage\/(\d+)$/', $path, $matches) ? true : false):
+        // Page détail d'un covoiturage
+        $covoiturageController = new CovoiturageController($pdo);
+        $covoiturageController->details($matches[1]);
         break;
         
     case '/connexion':
