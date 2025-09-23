@@ -6,7 +6,7 @@ require_once 'app/views/includes/head-header.php';
         <section class="search-section">
             <div class="container">
                 <h2>Trouvez votre covoiturage</h2>
-                <p>Recherchez parmi nos trajets écologiques et économiques</p>
+                <p class="text">Recherchez parmi nos trajets écologiques et économiques</p>
                 
                 <form action="/covoiturages" method="GET" class="search-form">
                     <div class="search-inputs">
@@ -90,27 +90,32 @@ require_once 'app/views/includes/head-header.php';
                                             <span class="arrow">→</span>
                                             <strong><?= htmlspecialchars($trajet['ville_arrivee']) ?></strong>
                                         </div>
-                                        
+                                        <hr>
                                         <div class="datetime">
                                             <?= date('d/m/Y', strtotime($trajet['date_depart'])) ?> à 
                                             <?= date('H:i', strtotime($trajet['heure_depart'])) ?>
                                         </div>
+                                        <hr>
                                         
                                         <?php if ($trajet['energie'] === 'electrique'): ?>
-                                            <div class="eco-badge">🌱 Trajet écologique</div>
+                                            <div class="eco-badge"><img src="https://www.gifsgratuits.fr/planete/planete%20(2).gif" alt="Emoji écologique" class="gif"> Trajet écologique</div>
                                         <?php endif; ?>
                                     </div>
+                                    <hr>
                                     
                                     <div class="driver-info">
                                         <div class="driver-name">
-                                            👤 <?= htmlspecialchars($trajet['pseudo']) ?>
+                                            <img src="https://i.pinimg.com/736x/bb/7b/b5/bb7bb50516a7712d31e63ab25345d782.jpg" alt="Conducteur" class="driver-img"><?= htmlspecialchars($trajet['pseudo']) ?>
                                         </div>
+                                        <hr>
                                         <div class="rating">
-                                            ⭐ <?= number_format($trajet['note_moyenne'] ?? 5, 1) ?>
+                                            <img src="https://i.pinimg.com/originals/2d/d0/31/2dd031abcc5e7c2a2ad1524bf869325e.gif" alt="etoile" class="etoile"> <?= number_format($trajet['note_moyenne'] ?? 5, 1) ?>
                                         </div>
+                                        <hr>
                                         <div class="vehicle">
-                                            🚗 <?= htmlspecialchars($trajet['marque']) ?> <?= htmlspecialchars($trajet['modele']) ?>
+                                            <img src="https://i.pinimg.com/originals/9d/0b/de/9d0bdec34936a8d1f6af537cd7a4b7e9.gif" alt="Conducteur" class="gif2"> <?= htmlspecialchars($trajet['marque']) ?> <?= htmlspecialchars($trajet['modele']) ?>
                                         </div>
+                                        <hr>
                                     </div>
                                     
                                     <div class="booking-info">
@@ -118,12 +123,13 @@ require_once 'app/views/includes/head-header.php';
                                             <strong><?= number_format($trajet['prix'], 2) ?> €</strong>
                                             <small>par personne</small>
                                         </div>
-                                        
+                                        <hr>
                                         <div class="places">
                                             <?= $trajet['places_disponibles'] ?> place(s) disponible(s)
                                         </div>
+                                        <hr>
                                         
-                                        <a href="/covoiturage/<?= $trajet['id'] ?>" class="btn btn-secondary">
+                                        <a href="/covoiturage/<?= $trajet['id'] ?>" class="btn btn-primary">
                                             Voir détails
                                         </a>
                                     </div>

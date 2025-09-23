@@ -18,6 +18,7 @@ body {
     padding: 0 20px;
 }
 
+
 ul {
     padding: 0;
 }
@@ -62,6 +63,9 @@ nav , footer  {
     height: 4.5em;
     margin-right: 0.625em;
 }
+
+
+
 
 .logo h1 {
     color: white;
@@ -193,11 +197,11 @@ nav , footer  {
 
 /* Styles pour les pages d'authentification */
 .auth-page {
-    background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
     min-height: 80vh;
     display: flex;
     align-items: center;
-    padding: 2rem 0;
+    padding: 2rem;
 }
 
 .auth-container {
@@ -382,6 +386,15 @@ nav , footer  {
     gap: 2rem;
     flex-wrap: wrap;
     align-items: center;
+    color: #666;
+}
+
+.container h3, .search-prompt, small{
+    color: #666;
+}
+
+.container{
+    color: #ddd;
 }
 
 .filter-group {
@@ -415,6 +428,7 @@ nav , footer  {
     gap: 1.5rem;
     align-items: center;
     transition: box-shadow 0.3s;
+    color: #666;
 }
 
 .covoiturage-card:hover {
@@ -442,7 +456,9 @@ nav , footer  {
     padding: 0.25rem 0.5rem;
     border-radius: 15px;
     font-size: 0.875rem;
-    display: inline-block;
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
 }
 
 .driver-info, .booking-info {
@@ -450,6 +466,44 @@ nav , footer  {
     flex-direction: column;
     gap: 0.5rem;
 }
+.driver-name {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    margin-left: 2.3em;
+}
+
+.vehicle{
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.rating{
+    display: flex;
+    gap: 3.5em;
+    font-size: 1.5em;
+    margin-left: 2.2em;
+    margin-top: 1em;
+}
+
+.gif {
+    border-radius: 50%;
+    width: 25%;
+}
+.gif2{
+    width: 50%;
+}
+
+.driver-img{
+    width: 25%;
+}
+
+.etoile{
+    width: 15%;
+}
+
+
 
 .price {
     font-size: 1.25rem;
@@ -478,13 +532,17 @@ nav , footer  {
 
 .popular-routes {
     margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 .route-links {
     display: flex;
     gap: 1rem;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-direction: column;
+    width: 50%;
     margin-top: 1rem;
 }
 

@@ -37,19 +37,19 @@ require_once 'app/views/includes/head-header.php';
         <!-- Section présentation -->
         <section class="presentation">
             <div class="container">
-                <h3>Pourquoi choisir EcoRide ?</h3>
+                <h2 class="text-center">Pourquoi choisir EcoRide ?</h2>
                 <div class="features">
                     <div class="feature">
-                        <h4>🌍 Écologique</h4>
+                        <h4><img src="https://www.gifsgratuits.fr/planete/planete%20(2).gif" alt="Emoji écologique" class="gif"> Écologique</h4>
                         <p>Réduisez votre empreinte carbone en partageant vos trajets</p>
                     </div>
                     <div class="feature">
-                        <h4>💰 Économique</h4>
-                        <p>Partagez les frais de route et voyagez moins cher</p>
+                        <h4><img src="https://www.gifsgratuits.fr/emojis/argent/1%20(156).gif" alt="Emoji économique"> Économique</h4>
+                        <p>Partagez les frais de route et voyagez moins cher en faisant de économies</p>
                     </div>
                     <div class="feature">
-                        <h4>🤝 Convivial</h4>
-                        <p>Rencontrez de nouvelles personnes et créez du lien</p>
+                        <h4><img src="https://www.gifsgratuits.fr/main/m%20(323).gif" alt="Emoji de convivialité" class="gif"> Convivial</h4>
+                        <p>Rencontrez de nouvelles personnes et échangez durant votre trajet </p>
                     </div>
                 </div>
             </div>
