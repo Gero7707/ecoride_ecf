@@ -4,6 +4,17 @@ require_once 'app/views/includes/head-header.php';
 
     <!-- Page d'accueil -->
     <main>
+        <?php if (isset($_SESSION['user_id'])): ?>
+            <section class="welcome-user">
+                <div class="container">
+                    <div class="alert alert-success">
+                        Bienvenue <?= htmlspecialchars($_SESSION['user_pseudo']) ?> ! 
+                        Vous avez <?= isset($_SESSION['user_credits']) ? $_SESSION['user_credits'] : '0' ?> crédits.
+                    </div>
+                </div>
+            </section>
+        <?php endif; ?>
+        
         <!-- Section héro -->
         <section class="hero">
             <div class="hero-content">
@@ -23,16 +34,7 @@ require_once 'app/views/includes/head-header.php';
             </div>
         </section>
 
-        <?php if (isset($_SESSION['user_id'])): ?>
-            <section class="welcome-user">
-                <div class="container">
-                    <div class="alert alert-success">
-                        Bienvenue <?= htmlspecialchars($_SESSION['user_pseudo']) ?> ! 
-                        Vous avez <?= isset($_SESSION['user_credits']) ? $_SESSION['user_credits'] : '0' ?> crédits.
-                    </div>
-                </div>
-            </section>
-        <?php endif; ?>
+        
 
         <!-- Section présentation -->
         <section class="presentation">

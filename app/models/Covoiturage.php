@@ -11,7 +11,7 @@ class Covoiturage {
      */
     public function search($depart, $arrivee, $date = null, $filters = []) {
         $sql = "SELECT c.*, u.pseudo, v.marque, v.modele, v.energie,
-                       AVG(a.note) as note_moyenne
+                        AVG(a.note) as note_moyenne
                 FROM covoiturage c
                 JOIN utilisateur u ON c.chauffeur_id = u.id
                 JOIN vehicule v ON c.vehicule_id = v.id
@@ -90,7 +90,7 @@ class Covoiturage {
      */
     public function getById($id) {
         $sql = "SELECT c.*, u.pseudo, u.telephone, v.marque, v.modele, v.energie, v.couleur,
-                       AVG(a.note) as note_moyenne, COUNT(a.id) as nb_avis
+                        AVG(a.note) as note_moyenne, COUNT(a.id) as nb_avis
                 FROM covoiturage c
                 JOIN utilisateur u ON c.chauffeur_id = u.id
                 JOIN vehicule v ON c.vehicule_id = v.id
@@ -125,13 +125,10 @@ class Covoiturage {
     /**
      * Créer un nouveau covoiturage
      */
-    public function create($chauffeur_id, $vehicule_id, $ville_depart, $ville_arrivee, 
-                          $date_depart, $heure_depart, $heure_arrivee, $prix, $places_disponibles) {
+    public function create($chauffeur_id, $vehicule_id, $ville_depart, $ville_arrivee, $date_depart, $heure_depart, $heure_arrivee, $prix, $places_disponibles) {
         
-        $sql = "INSERT INTO covoiturage (chauffeur_id, vehicule_id, ville_depart, ville_arrivee,
-                                       date_depart, heure_depart, heure_arrivee, prix, places_disponibles, statut)
-                VALUES (:chauffeur_id, :vehicule_id, :ville_depart, :ville_arrivee,
-                        :date_depart, :heure_depart, :heure_arrivee, :prix, :places_disponibles, 'prevu')";
+        $sql = "INSERT INTO covoiturage (chauffeur_id, vehicule_id, ville_depart, ville_arrivee, date_depart, heure_depart, heure_arrivee, prix, places_disponibles, statut)
+                VALUES (:chauffeur_id, :vehicule_id, :ville_depart, :ville_arrivee,:date_depart, :heure_depart, :heure_arrivee, :prix, :places_disponibles, 'prevu')";
         
         $stmt = $this->pdo->prepare($sql);
         $result = $stmt->execute([

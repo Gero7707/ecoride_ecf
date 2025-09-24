@@ -80,7 +80,6 @@ nav , footer  {
 .hero {
     background: linear-gradient(rgba(45, 80, 22, 0.8), rgba(74, 124, 37, 0.8)), 
                 url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%234a7c25" d="M0,100 Q250,50 500,100 T1000,100 L1000,300 L0,300 Z"/></svg>');
-    background-size: cover;
     color: white;
     padding:24px 0;
     text-align: center;
@@ -313,6 +312,7 @@ nav , footer  {
 
 .welcome-user {
     padding: 1rem 0;
+    background: linear-gradient(135deg, #4a7c25, #2d5016);
 }
 
 
