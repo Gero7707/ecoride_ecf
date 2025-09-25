@@ -1,4 +1,5 @@
 <?php
+$pageSpecificCss = 'search.css';
 require_once 'app/views/includes/head-header.php';
 ?>
 <main class="search-page">
@@ -6,7 +7,7 @@ require_once 'app/views/includes/head-header.php';
         <section class="search-section">
             <div class="container">
                 <h2>Trouvez votre covoiturage</h2>
-                <p class="text">Recherchez parmi nos trajets écologiques et économiques</p>
+                <p></p>Recherchez parmi nos trajets écologiques et économiques</p>
                 
                 <form action="/covoiturages" method="GET" class="search-form">
                     <div class="search-inputs">
@@ -79,7 +80,7 @@ require_once 'app/views/includes/head-header.php';
             <div class="container">
                 <?php if (isset($_GET['depart']) && isset($_GET['arrivee'])): ?>
                     <?php if (isset($covoiturages) && !empty($covoiturages)): ?>
-                        <h3><?= count($covoiturages) ?> trajet(s) trouvé(s)</h3>
+                        <h4 class="text-center"><?= count($covoiturages) ?> trajet(s) trouvé(s)</h4>
                         
                         <div class="covoiturage-list">
                             <?php foreach ($covoiturages as $trajet): ?>

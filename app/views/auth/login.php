@@ -1,4 +1,5 @@
 <?php 
+$pageSpecificCss = 'style.css';
 require_once 'app/views/includes/head-header.php';
 ?>
     

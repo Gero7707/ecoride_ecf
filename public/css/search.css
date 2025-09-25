@@ -1,4 +1,3 @@
-/* Reset et base */
 * {
     margin: 0;
     padding: 0;
@@ -10,6 +9,23 @@ body {
     line-height: 1.6;
     color: #ddd;
     background-color: #f8f9fa;
+}
+
+/* Footer */
+footer {
+    background: #2d5016;
+    color: white;
+    text-align: center;
+    padding: 2rem 0;
+}
+
+footer a {
+    color: #a8d982;
+    text-decoration: none;
+}
+
+footer a:hover {
+    text-decoration: underline;
 }
 
 .container {
@@ -48,13 +64,6 @@ nav , footer  {
     width: 92%;
 }
 
-#datepicker{
-    width: 100%;
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 5px;
-    font-size: 1rem;
-}
 .logo {
     width: 65%;
 }
@@ -64,261 +73,32 @@ nav , footer  {
     margin-right: 0.625em;
 }
 
-
-
-
 .logo h1 {
     color: white;
     font-size: 1.8rem;
     font-weight: bold;
 }
 
-
-
-
-/* Section héro */
-.hero {
-    background: linear-gradient(rgba(45, 80, 22, 0.8), rgba(74, 124, 37, 0.8)), 
-                url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300"><path fill="%234a7c25" d="M0,100 Q250,50 500,100 T1000,100 L1000,300 L0,300 Z"/></svg>');
-    color: white;
-    padding:24px 0;
-    text-align: center;
+/* Styles pour la page de recherche */
+.search-page {
+    min-height: 80vh;
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
 }
 
-.hero-content h2 {
-    font-size: 2.5rem;
-    margin-bottom: 1rem;
-    text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
-}
-
-.hero-content p {
-    font-size: 1.2rem;
-    margin-bottom: 2rem;
-    opacity: 0.9;
-}
-
-/* Barre de recherche */
-.search-box {
+.search-form {
+    max-width: 800px;
+    margin: 0 auto;
     background: white;
     padding: 2rem;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-    max-width: 53em;
-    margin: 0 auto;
-    color: #666;
 }
 
-.input-group {
-    flex-direction: column;
-    margin-bottom: 1rem;
-    text-align: left;
-}
-
-
-.search-box form {
+.search-inputs {
     display: grid;
     grid-template-columns: 1fr 1fr 1fr auto;
     gap: 1rem;
-    align-items: center;
-}
-
-.search-box input {
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 5px;
-    font-size: 1rem;
-}
-
-.search-box input:focus {
-    outline: none;
-    border-color: #4a7c25;
-}
-
-.search-box button {
-    background: #4a7c25;
-    color: white;
-    border: none;
-    padding: 12px 24px;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.search-box button:hover {
-    background: #2d5016;
-}
-
-
-/* Section présentation */
-.presentation {
-    padding: 60px 0;
-    background: linear-gradient(135deg, #2d5016, #4a7c25);
-}
-
-.presentation h3 {
-    text-align: center;
-    font-size: 2rem;
-    margin-bottom: 3rem;
-    color: #ddd;
-}
-
-.features {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-    gap: 2rem;
-    margin-top: 2rem;
-}
-
-.feature {
-    text-align: center;
-    padding: 2rem;
-    border-radius: 10px;
-    background: #f8f9fa;
-    border: 1px solid #e0e0e0;
-    transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.feature p {
-    color: #666;
-}
-
-.feature:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.feature h4 {
-    font-size: 1.3rem;
-    margin-bottom: 1rem;
-    color: #4a7c25;
-}
-
-/* Styles pour les pages d'authentification */
-.auth-page {
-    background: linear-gradient(135deg, #2d5016, #4a7c25);
-    min-height: 80vh;
-    display: flex;
-    align-items: center;
-    padding: 2rem;
-}
-
-.auth-container {
-    max-width: 500px;
-    margin: 0 auto;
-    background: white;
-    padding: 3rem;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-}
-
-.auth-container h2 {
-    text-align: center;
-    color: #2d5016;
-    margin-bottom: 0.5rem;
-}
-
-.auth-container p {
-    text-align: center;
-    color: #666;
-    margin-bottom: 2rem;
-}
-
-.auth-form {
-    display: flex;
-    flex-direction: column;
-    gap: 1.5rem;
-}
-
-.form-group {
-    display: flex;
-    flex-direction: column;
-}
-
-.form-group label {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    color: #333;
-}
-
-.form-group input {
-    padding: 12px;
-    border: 2px solid #e0e0e0;
-    border-radius: 5px;
-    font-size: 1rem;
-    transition: border-color 0.3s;
-}
-
-.form-group input:focus {
-    outline: none;
-    border-color: #4a7c25;
-}
-
-.form-group small {
-    color: #666;
-    font-size: 0.875rem;
-    margin-top: 0.25rem;
-}
-
-.alert {
-    padding: 1rem;
-    border-radius: 5px;
-    margin-bottom: 1rem;
-}
-
-.alert-error {
-    background: #f8d7da;
-    color: #721c24;
-    border: 1px solid #f5c6cb;
-}
-
-.alert-success {
-    background: #d4edda;
-    color: #155724;
-    border: 1px solid #c3e6cb;
-}
-
-.btn {
-    padding: 12px 24px;
-    border: none;
-    border-radius: 5px;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: background 0.3s;
-}
-
-.btn-primary {
-    background: #4a7c25;
-    color: white;
-}
-
-.btn-primary:hover {
-    background: #2d5016;
-}
-
-.auth-links {
-    text-align: center;
-    margin-top: 2rem;
-}
-
-.auth-links a {
-    color: #4a7c25;
-    text-decoration: none;
-}
-
-.auth-links a:hover {
-    text-decoration: underline;
-}
-
-.welcome-user {
-    padding: 1rem 0;
-    background: linear-gradient(135deg, #4a7c25, #2d5016);
-}
-
-
-/* Styles pour la page de recherche */
-.search-page {
-    min-height: 80vh;
+    align-items: end;
 }
 
 .search-section {
@@ -339,20 +119,12 @@ nav , footer  {
     opacity: 0.9;
 }
 
-.search-form {
-    max-width: 800px;
-    margin: 0 auto;
-    background: white;
-    padding: 2rem;
-    border-radius: 10px;
-    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
-}
 
-.search-inputs {
-    display: grid;
-    grid-template-columns: 1fr 1fr 1fr auto;
-    gap: 1rem;
-    align-items: end;
+
+.input-group {
+    flex-direction: column;
+    margin-bottom: 1rem;
+    text-align: left;
 }
 
 .input-group label {
@@ -375,10 +147,39 @@ nav , footer  {
     border-color: #4a7c25;
 }
 
+.btn {
+    padding: 12px 24px;
+    border: none;
+    border-radius: 5px;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.btn-primary {
+    background: #4a7c25;
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2d5016;
+}
+
+.btn-secondary {
+    background: #6c757d;
+    color: white;
+}
+
+.btn-secondary:hover {
+    background: #5a6268;
+}
+
 .filters-section {
     background: #f8f9fa;
     padding: 2rem 0;
-    border-bottom: 1px solid #e0e0e0;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    margin: 1em;
 }
 
 .filters {
@@ -387,14 +188,6 @@ nav , footer  {
     flex-wrap: wrap;
     align-items: center;
     color: #666;
-}
-
-.container h3, .search-prompt, small,.no-results{
-    color: #666;
-}
-
-.container{
-    color: #ddd;
 }
 
 .filter-group {
@@ -409,7 +202,10 @@ nav , footer  {
 
 .results-section {
     padding: 2rem 0;
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
 }
+
+
 
 .covoiturage-list {
     display: flex;
@@ -418,13 +214,13 @@ nav , footer  {
     margin-top: 1.5rem;
 }
 
+
+
 .covoiturage-card {
     background: white;
     border: 1px solid #e0e0e0;
     border-radius: 10px;
     padding: 1.5rem;
-    display: grid;
-    grid-template-columns: 2fr 1fr 1fr;
     gap: 1.5rem;
     align-items: center;
     transition: box-shadow 0.3s;
@@ -438,6 +234,7 @@ nav , footer  {
 .route {
     font-size: 1.2rem;
     margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .arrow {
@@ -448,6 +245,7 @@ nav , footer  {
 .datetime {
     color: #666;
     margin-bottom: 0.5rem;
+    text-align: center;
 }
 
 .eco-badge {
@@ -503,12 +301,11 @@ nav , footer  {
     width: 15%;
 }
 
-
-
-.price {
+.price, .places {
     font-size: 1.25rem;
     color: #4a7c25;
     font-weight: bold;
+    text-align: center;
 }
 
 .price small {
@@ -518,9 +315,16 @@ nav , footer  {
     font-weight: normal;
 }
 
+.container h3, .search-prompt, small,.no-results{
+    color: #666;
+}
+
 .no-results, .search-prompt {
     text-align: center;
     padding: 3rem 0;
+    background: white;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
 }
 
 .suggestion {
@@ -559,37 +363,8 @@ nav , footer  {
     background: #2d5016;
 }
 
-.btn-secondary {
-    background: #6c757d;
-    color: white;
-}
-
-.btn-secondary:hover {
-    background: #5a6268;
-}
-
-/* Footer */
-footer {
-    background: #2d5016;
-    color: white;
-    text-align: center;
-    padding: 2rem 0;
-}
-
-footer a {
-    color: #a8d982;
-    text-decoration: none;
-}
-
-footer a:hover {
-    text-decoration: underline;
-}
 
 
-/* Styles pour la page de profil */
-.profile-info, .stats-grid, .section-content{
-    color: #666;
-}
 
 /* Responsive */
 @media (max-width: 992px) {
@@ -640,34 +415,13 @@ footer a:hover {
         color: #ddd;
         margin-left: auto;
     }
-    
-    .hero-content h2 {
-        font-size: 2rem;
-    }
-    
-    .search-box {
-        max-width: 21em;
-    }
-
-    .search-box form {
-        grid-template-columns: 1fr;
-    }
-    
-    .features {
-        grid-template-columns: 1fr;
-    }
 }
 
 @media (max-width: 768px) {
     .search-inputs {
         grid-template-columns: 1fr;
     }
-    
-    .covoiturage-card {
-        grid-template-columns: 1fr;
-        text-align: center;
-    }
-    
+
     .filters {
         flex-direction: column;
         align-items: stretch;

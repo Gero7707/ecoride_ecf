@@ -11,6 +11,7 @@ session_start();
 require_once 'config/database.php';
 require_once 'app/controllers/AuthController.php';
 require_once 'app/controllers/CovoiturageController.php';
+require_once 'app/controllers/AccountController.php';
 
 // Récupération de l'URL demandée
 $request = $_SERVER['REQUEST_URI'];
@@ -28,6 +29,32 @@ switch ($path) {
         // Page de recherche de covoiturages
         $covoiturageController = new CovoiturageController($pdo);
         $covoiturageController->search();
+        break;
+
+    case '/profil':
+    case '/mon-compte':
+        // Page de profil utilisateur
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+        $accountController = new AccountController($pdo);
+        $accountController->showProfile();
+        break;
+        
+    case '/mon-compte/modifier':
+    case '/profil/modifier':
+        // Page de modification du profil
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+        $accountController = new AccountController($pdo);
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $accountController->processUpdateProfile();
+        } else {
+            $accountController->showEditProfile();
+        }
         break;
         
     case (preg_match('/^\/covoiturage\/(\d+)$/', $path, $matches) ? true : false):
@@ -66,6 +93,8 @@ switch ($path) {
         // Page 404
         http_response_code(404);
         echo "<h1>Page non trouvée</h1>";
+        echo "<p>La page demandée n'existe pas.</p>";
+        echo "<a href='/'>Retour à l'accueil</a>";
         break;
 }
 ?>

@@ -8,7 +8,25 @@
 
     <!-- Datepicker CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
-    <link rel="stylesheet" href="public/css/style.css">
+    <!-- <link rel="stylesheet" href="public/css/style.css"> -->
+    <?php
+    // htmlspecialchars($_SESSION['user_pseudo'])
+    if (isset($pageSpecificCss)) {
+        if (is_array($pageSpecificCss)) {
+            // Si c'est un tableau, parcourir et inclure chaque fichier CSS.
+            foreach ($pageSpecificCss as $cssFile) {
+                 // htmlspecialchars() pour la sécurité sur le nom de fichier.
+                // Ajout de '?v=' . time() pour le cache busting.
+                echo '<link rel="stylesheet" href="public/css/' . htmlspecialchars($cssFile) . '?v=' . time() . '">' . PHP_EOL;
+            }
+        } else {
+            // Si c'est une seule chaîne, inclure ce fichier CSS.
+            // htmlspecialchars() pour la sécurité sur le nom de fichier.
+            // Ajout de '?v=' . time() pour le cache busting.
+            echo '<link rel="stylesheet" href="public/css/' . htmlspecialchars($pageSpecificCss) . '?v=' . time() . '">' . PHP_EOL;
+        }
+    }
+    ?>
 </head>
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
@@ -30,7 +48,7 @@
                     </li>
                     <?php if (isset($_SESSION['user_id'])): ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="/profil">Mon compte (<?= htmlspecialchars($_SESSION['user_pseudo']) ?>)</a>
+                        <a class="nav-link" href="/profil">Mon compte </a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/deconnexion">Déconnexion</a>
