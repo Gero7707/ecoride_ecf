@@ -7,16 +7,20 @@
 body {
     font-family: 'Arial', sans-serif;
     line-height: 1.6;
-    color: #ddd;
+    color: #666;
     background-color: #f8f9fa;
 }
 
 .container {
     max-width: 1200px;
     margin: 0 auto;
-    padding: 0 20px;
+    padding: 0;
 }
 
+main{
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
+    padding: 1em;
+}
 
 ul {
     padding: 0;
@@ -62,79 +66,70 @@ nav , footer  {
     font-weight: bold;
 }
 
-.trip-header, .trip-details-content {
-    background: linear-gradient(135deg, #2d5016, #4a7c25);
-    padding: 1rem;
-    text-align: center;
-}
-
-.trip-route-main, .details-grid{
-    background:#f8f9fa ;
-    color: #666;
-    border-radius: 10px;
-    padding: 1em;
-}
-
-.route-cities{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-}
-
-.departure-city h1, .arrival-city h1{
-    font-size: 1.4rem;
-    font-weight: bold;
-}
-
-.departure-dot {
-    font-size: 1.5rem;
-    color: #54c707;
-}
-
-.arrival-dot,.fa-calendar-alt, .fa-gas-pump, .fa-info-circle, .fa-palette, .fa-flag{
-    font-size: 1.5rem;
-    color: #de4343;
-}
-.fa-clock, .price-amount h3, .fa-users, .fa-car, .fa-route{
+.fa-clock, .fa-users, .fa-car, .fa-route,.fa-euro-sign{
     font-size: 1.5rem;
     color: #4ebaf0;
 }
 
-.fa-arrow-right{
-    font-size: 2rem;
-    color: #333;
+.fa-calendar-alt, .fa-gas-pump, .fa-info-circle, .fa-palette,.fa-map-marked-alt,.fa-smoking-ban{
+    font-size: 1.5rem;
+    color: #de4343;
 }
 
-.fa-user{
+.fa-user,.fa-id-card,.fa-cog{
+    font-size: 1.5rem;
     color: #a02eba;
 }
 
-.spec i,.energy-badge  i{
-    margin-right: 1em;
+.fa-paw,.fa-check-circle{
+    color: green;
+    font-size: 1.5rem;
 }
 
-.trip-date, .trip-time{
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    margin-left: 1em;
-    gap: 1em;
-}
-
-.price-amount, .availability, .car, .vehicle-specs, .status-info,  .driver-card h3{
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    margin-left: 1em;
-    gap: 1em;
-}
-
-
-
-.star-filled,.fa-star{
+.star-filled,.fa-star,.fa-coins{
     color: rgb(215, 215, 42);
 }
 
+.profile-header , .stats-section,.content-section{
+    background:#f8f9fa ;
+    color: #666;
+    border-radius: 10px;
+    padding: 1em;
+    margin-top: 1em;
+}
 
+.profile-avatar img{
+    width: 9em;
+    height: 9em;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1em;
+    border: 4px solid #4ebaf0;
+}
+
+.infos,.vehicle-energy{
+    font-size: 1.2rem;
+    margin-bottom: 0.5rem;
+    margin-left: 1em;
+    gap: 1em;
+}
+.infos i,.vehicle-energy i{
+    margin-right: 1em;
+}
+
+.trip-meta{
+    display: flex;
+    flex-direction: column;
+    gap: 1em
+}
+
+.vehicle-info-small,.trip-status{
+    margin-top: 1em;
+}
+
+.trip-meta span i,.vehicle-info-small i{
+    margin-right: 1em;
+}
 /* Footer */
 footer {
     background: #2d5016;
@@ -151,6 +146,9 @@ footer a {
 footer a:hover {
     text-decoration: underline;
 }
+
+
+
 
 /* Responsive */
 @media (max-width: 992px) {
@@ -202,3 +200,4 @@ footer a:hover {
         margin-left: auto;
     }
 } 
+

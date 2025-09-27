@@ -11,6 +11,11 @@ body {
     background-color: #f8f9fa;
 }
 
+main{
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
+    padding: 1em;
+}
+
 .container {
     max-width: 1200px;
     margin: 0 auto;
@@ -62,79 +67,6 @@ nav , footer  {
     font-weight: bold;
 }
 
-.trip-header, .trip-details-content {
-    background: linear-gradient(135deg, #2d5016, #4a7c25);
-    padding: 1rem;
-    text-align: center;
-}
-
-.trip-route-main, .details-grid{
-    background:#f8f9fa ;
-    color: #666;
-    border-radius: 10px;
-    padding: 1em;
-}
-
-.route-cities{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 1rem;
-}
-
-.departure-city h1, .arrival-city h1{
-    font-size: 1.4rem;
-    font-weight: bold;
-}
-
-.departure-dot {
-    font-size: 1.5rem;
-    color: #54c707;
-}
-
-.arrival-dot,.fa-calendar-alt, .fa-gas-pump, .fa-info-circle, .fa-palette, .fa-flag{
-    font-size: 1.5rem;
-    color: #de4343;
-}
-.fa-clock, .price-amount h3, .fa-users, .fa-car, .fa-route{
-    font-size: 1.5rem;
-    color: #4ebaf0;
-}
-
-.fa-arrow-right{
-    font-size: 2rem;
-    color: #333;
-}
-
-.fa-user{
-    color: #a02eba;
-}
-
-.spec i,.energy-badge  i{
-    margin-right: 1em;
-}
-
-.trip-date, .trip-time{
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    margin-left: 1em;
-    gap: 1em;
-}
-
-.price-amount, .availability, .car, .vehicle-specs, .status-info,  .driver-card h3{
-    font-size: 1.2rem;
-    margin-bottom: 0.5rem;
-    margin-left: 1em;
-    gap: 1em;
-}
-
-
-
-.star-filled,.fa-star{
-    color: rgb(215, 215, 42);
-}
-
-
 /* Footer */
 footer {
     background: #2d5016;
@@ -150,6 +82,65 @@ footer a {
 
 footer a:hover {
     text-decoration: underline;
+}
+
+.edit-header , .edit-form-section{
+    background:#f8f9fa ;
+    color: #666;
+    border-radius: 10px;
+    padding: 1em;
+    margin-top: 1em;
+}
+
+.back-navigation a{
+    margin-bottom: 1em;
+    text-decoration: none;
+    color: #666;
+}
+
+.fa-user-edit,.fa-camera,.fa-user,.fa-cog,.fa-lock,.fa-id-badge{
+    color :#a02eba;
+    font-size: 1.5rem;
+}
+
+.fa-key,.fa-info-circle,.fa-smoking,.fa-map-marker-alt{
+    color:#de4343;
+    font-size: 1.5rem;
+}
+
+.fa-phone,.fa-envelope{
+    color:#4ebaf0;
+    font-size: 1.5rem;
+}
+
+.fa-paw{
+    color:green;
+    font-size: 1.5rem;
+}
+
+.form-group label , .fa-smoking,.fa-paw{
+    margin-left: 1em;
+}
+
+.form-group,.form-section,.preferences-grid,.checkbox-group,.password-requirements,.form-actions{
+    margin-top: 1em;
+}
+
+h3 i , .fa-smoking,.fa-paw{
+    margin-right: 1em;
+}
+
+.input-group input, .input-group select, .form-control{
+    border: 1px solid #666;
+}
+
+.current-photo img{
+    width: 9em;
+    height: 9em;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 1em;
+    border: 4px solid #4ebaf0;
 }
 
 /* Responsive */

@@ -163,8 +163,11 @@ class AccountController {
             }
         }
         
+
+        // Récupérer la photo actuelle de l'utilisateur
+        $currentUser = $this->userModel->getUserById($userId);
         // Gestion de l'upload de photo
-        $photoPath = null;
+        $photoPath = $currentUser['photo'];
         if (isset($_FILES['photo']) && $_FILES['photo']['error'] === UPLOAD_ERR_OK) {
             $photoResult = $this->handlePhotoUpload($_FILES['photo']);
             if ($photoResult['success']) {
@@ -187,7 +190,8 @@ class AccountController {
             'email' => $email,
             'telephone' => $telephone,
             'adresse' => $adresse,
-            'photo' => $photoPath
+            'photo' => $photoPath,
+            'statut' => $statut
         ];
         
         // Mettre à jour le profil
@@ -223,7 +227,11 @@ class AccountController {
         $_SESSION['user_pseudo'] = $pseudo;
         $_SESSION['user_statut'] = $statut;
         
-        $_SESSION['success'] = 'Profil mis à jour avec succès !';
+        if ($statut === 'chauffeur') {
+            $_SESSION['success'] = 'Profil mis à jour ! Vous êtes maintenant chauffeur et pouvez proposer des trajets.';
+        } else {
+            $_SESSION['success'] = 'Profil mis à jour ! Vous êtes maintenant passager.';
+        }
         header('Location: /mon-compte');
         exit();
     }

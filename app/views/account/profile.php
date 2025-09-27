@@ -1,9 +1,21 @@
 <?php
-$pageSpecificCss = 'style.css';
+$pageSpecificCss = 'monCompte.css';
 require_once 'app/views/includes/head-header.php';
 ?>
 <!-- Page Mon Compte -->
 <main>
+    <div class="profile-actions d-flex justify-content-around mb-4">
+        <a href="/mon-compte/modifier" class="btn btn-primary">
+            <i class="fas fa-edit"></i>
+            Modifier profil
+        </a>
+        <?php if ($user['statut'] === 'chauffeur'): ?>
+            <a href="/covoiturage/proposer" class="btn btn-success">
+                <i class="fas fa-plus"></i>
+                Publier trajet
+            </a>
+        <?php endif; ?>
+    </div>
     <!-- Messages flash -->
     <?php if (isset($_SESSION['success'])): ?>
         <section class="flash-messages">
@@ -35,16 +47,17 @@ require_once 'app/views/includes/head-header.php';
             <div class="profile-banner">
                 <div class="profile-avatar">
                     <?php if (!empty($user['photo']) && file_exists($user['photo'])): ?>
-                        <img src="<?= htmlspecialchars($user['photo']) ?>" alt="Avatar de <?= htmlspecialchars($user['pseudo']) ?>" class="avatar-img">
+                        <img src="/<?= htmlspecialchars($user['photo']) ?>" alt="Avatar de <?= htmlspecialchars($user['pseudo']) ?>" class="avatar-img">
                     <?php else: ?>
                         <div class="avatar-placeholder">
                             <i class="fas fa-user"></i>
                         </div>
                     <?php endif; ?>
                 </div>
+                <hr>
                 <div class="profile-info">
                     <h1 class="profile-name"><?= htmlspecialchars($user['pseudo']) ?></h1>
-                    <div class="profile-status">
+                    <div class="profile-status infos d-flex flex-column gap-2">
                         <span class="status-badge status-<?= $user['statut'] ?>">
                             <i class="fas fa-<?= $user['statut'] === 'chauffeur' ? 'car' : 'user' ?>"></i>
                             <?= ucfirst($user['statut']) ?>
@@ -57,23 +70,11 @@ require_once 'app/views/includes/head-header.php';
                             </span>
                         <?php endif; ?>
                     </div>
-                    <div class="profile-meta">
+                    <div class="profile-meta infos">
                         <span><i class="fas fa-calendar-alt"></i> Membre depuis <?= date('M Y', strtotime($user['date_creation'])) ?></span>
-                        <span><i class="fas fa-coins"></i> <?= $stats['credits'] ?> crédits</span>
                     </div>
                 </div>
-                <div class="profile-actions">
-                    <a href="/mon-compte/modifier" class="btn btn-primary">
-                        <i class="fas fa-edit"></i>
-                        Modifier mon profil
-                    </a>
-                    <?php if ($user['statut'] === 'chauffeur'): ?>
-                        <a href="/covoiturage/proposer" class="btn btn-success">
-                            <i class="fas fa-plus"></i>
-                            Proposer un trajet
-                        </a>
-                    <?php endif; ?>
-                </div>
+                
             </div>
         </div>
     </section>
@@ -82,43 +83,46 @@ require_once 'app/views/includes/head-header.php';
     <section class="stats-section">
         <div class="container">
             <div class="stats-grid">
-                <div class="stat-card">
+                <div class="stat-card d-flex gap-2">
                     <div class="stat-icon stat-credits">
                         <i class="fas fa-coins"></i>
                     </div>
-                    <div class="stat-content">
+                    <div class="stat-content d-flex gap-2">
                         <div class="stat-number"><?= $stats['credits'] ?></div>
                         <div class="stat-label">Crédits</div>
                     </div>
                 </div>
+                <hr>
                 
-                <div class="stat-card">
+                <div class="stat-card d-flex gap-2">
                     <div class="stat-icon stat-trips">
                         <i class="fas fa-route"></i>
                     </div>
-                    <div class="stat-content">
+                    <div class="stat-content d-flex gap-2">
                         <div class="stat-number"><?= $stats['trajets_proposes'] ?></div>
                         <div class="stat-label">Trajets proposés</div>
                     </div>
                 </div>
+                <hr>
                 
-                <div class="stat-card">
+                <div class="stat-card d-flex gap-2">
                     <div class="stat-icon stat-completed">
                         <i class="fas fa-check-circle"></i>
                     </div>
-                    <div class="stat-content">
+                    <div class="stat-content d-flex gap-2">
                         <div class="stat-number"><?= $stats['trajets_termines'] ?></div>
                         <div class="stat-label">Trajets terminés</div>
                     </div>
                 </div>
+                <hr>
                 
                 <?php if ($stats['note_moyenne'] > 0): ?>
-                <div class="stat-card">
+                <div class="stat-card d-flex gap-2">
                     <div class="stat-icon stat-rating">
                         <i class="fas fa-star"></i>
                     </div>
-                    <div class="stat-content">
-                        <div class="stat-number"><?= $stats['note_moyenne'] ?><small>/5</small></div>
+                    <div class="stat-content d-flex gap-2">
+                        <div class="stat-number"><?= $stats['note_moyenne'] ?><strong>/5</strong></div>
                         <div class="stat-label">Note moyenne</div>
                     </div>
                 </div>
@@ -135,12 +139,13 @@ require_once 'app/views/includes/head-header.php';
                 <!-- Section véhicules (pour chauffeurs) -->
                 <?php if ($user['statut'] === 'chauffeur'): ?>
                 <div class="content-section">
-                    <div class="section-header">
+                    <div class="section-header d-flex">
                         <h3><i class="fas fa-car"></i> Mes véhicules</h3>
                         <a href="/vehicule/ajouter" class="btn btn-sm btn-outline">
                             <i class="fas fa-plus"></i> Ajouter
                         </a>
                     </div>
+                    <hr>
                     <div class="section-content">
                         <?php if (!empty($vehicules)): ?>
                             <?php foreach ($vehicules as $vehicule): ?>
@@ -148,13 +153,14 @@ require_once 'app/views/includes/head-header.php';
                                     <div class="vehicle-info">
                                         <div class="vehicle-details">
                                             <h4><?= htmlspecialchars($vehicule['marque'] . ' ' . $vehicule['modele']) ?></h4>
-                                            <div class="vehicle-meta">
-                                                <span><i class="fas fa-palette"></i> <?= htmlspecialchars($vehicule['couleur']) ?></span>
-                                                <span><i class="fas fa-users"></i> <?= $vehicule['nombre_places'] ?> places</span>
-                                                <span><i class="fas fa-id-card"></i> <?= htmlspecialchars($vehicule['plaque_immatriculation']) ?></span>
+                                            <div class="vehicle-meta d-flex flex-column gap-2">
+                                                <span class="infos"><i class="fas fa-palette"></i> <?= htmlspecialchars($vehicule['couleur']) ?></span>
+                                                <span class="infos"><i class="fas fa-users"></i> <?= $vehicule['nombre_places'] ?> places</span>
+                                                <span class="infos"><i class="fas fa-id-card"></i> <?= htmlspecialchars($vehicule['plaque_immatriculation']) ?></span>
                                             </div>
                                         </div>
                                         <div class="vehicle-energy">
+                                            <i class="fa-solid fa-gas-pump"></i>
                                             <span class="energy-badge energy-<?= $vehicule['energie'] ?>">
                                                 <?= ucfirst($vehicule['energie']) ?>
                                             </span>
@@ -170,13 +176,16 @@ require_once 'app/views/includes/head-header.php';
                             </div>
                         <?php endif; ?>
                     </div>
+                    <hr>
                 </div>
+                
 
                 <!-- Mes covoiturages -->
                 <div class="content-section">
                     <div class="section-header">
                         <h3><i class="fas fa-map-marked-alt"></i> Mes covoiturages</h3>
                     </div>
+                    <hr>
                     <div class="section-content">
                         <?php if (!empty($mes_covoiturages)): ?>
                             <?php foreach (array_slice($mes_covoiturages, 0, 5) as $covoit): ?>
@@ -184,11 +193,11 @@ require_once 'app/views/includes/head-header.php';
                                     <div class="trip-route">
                                         <div class="route-info">
                                             <h4><?= htmlspecialchars($covoit['ville_depart'] . ' → ' . $covoit['ville_arrivee']) ?></h4>
-                                            <div class="trip-meta">
-                                                <span><i class="fas fa-calendar"></i> <?= date('d/m/Y', strtotime($covoit['date_depart'])) ?></span>
-                                                <span><i class="fas fa-clock"></i> <?= date('H:i', strtotime($covoit['heure_depart'])) ?></span>
-                                                <span><i class="fas fa-users"></i> <?= $covoit['nb_reservations'] ?> réservation(s)</span>
-                                                <span><i class="fas fa-euro-sign"></i> <?= $covoit['prix'] ?>€</span>
+                                            <div class="trip-meta d-flex flex-column gap-2">
+                                                <span class="infos"><i class="fas fa-calendar-alt"></i> <?= date('d/m/Y', strtotime($covoit['date_depart'])) ?></span>
+                                                <span class="infos"><i class="fas fa-clock"></i> <?= date('H:i', strtotime($covoit['heure_depart'])) ?></span>
+                                                <span class="infos"><i class="fas fa-users"></i> <?= $covoit['nb_reservations'] ?> réservation(s)</span>
+                                                <span class="infos"><i class="fas fa-euro-sign"></i> <?= $covoit['prix'] ?>€</span>
                                             </div>
                                         </div>
                                         <div class="trip-status">
@@ -197,6 +206,7 @@ require_once 'app/views/includes/head-header.php';
                                             </span>
                                         </div>
                                     </div>
+                                    <hr>
                                 </div>
                             <?php endforeach; ?>
                             <?php if (count($mes_covoiturages) > 5): ?>
@@ -218,8 +228,9 @@ require_once 'app/views/includes/head-header.php';
                 <!-- Mes réservations (pour passagers) -->
                 <div class="content-section">
                     <div class="section-header">
-                        <h3><i class="fas fa-ticket-alt"></i> Mes réservations</h3>
+                        <h3><i class="fas fa-check-circle"></i> Mes réservations</h3>
                     </div>
+                    <hr>
                     <div class="section-content">
                         <?php if (!empty($mes_reservations)): ?>
                             <?php foreach (array_slice($mes_reservations, 0, 5) as $reservation): ?>
@@ -228,7 +239,7 @@ require_once 'app/views/includes/head-header.php';
                                         <div class="route-info">
                                             <h4><?= htmlspecialchars($reservation['ville_depart'] . ' → ' . $reservation['ville_arrivee']) ?></h4>
                                             <div class="trip-meta">
-                                                <span><i class="fas fa-calendar"></i> <?= date('d/m/Y', strtotime($reservation['date_depart'])) ?></span>
+                                                <span><i class="fas fa-calendar-alt"></i> <?= date('d/m/Y', strtotime($reservation['date_depart'])) ?></span>
                                                 <span><i class="fas fa-clock"></i> <?= date('H:i', strtotime($reservation['heure_depart'])) ?></span>
                                                 <span><i class="fas fa-user"></i> Avec <?= htmlspecialchars($reservation['chauffeur_pseudo']) ?></span>
                                                 <span><i class="fas fa-euro-sign"></i> <?= $reservation['prix'] ?>€</span>
@@ -247,6 +258,7 @@ require_once 'app/views/includes/head-header.php';
                                                 <?= ucfirst($reservation['statut']) ?>
                                             </span>
                                         </div>
+                                        <hr>
                                     </div>
                                 </div>
                             <?php endforeach; ?>
@@ -271,6 +283,7 @@ require_once 'app/views/includes/head-header.php';
                     <div class="section-header">
                         <h3><i class="fas fa-star"></i> <?= $user['statut'] === 'chauffeur' ? 'Avis reçus' : 'Avis donnés' ?></h3>
                     </div>
+                    <hr>
                     <div class="section-content">
                         <?php 
                         $avis_list = $user['statut'] === 'chauffeur' ? $avis_recus : $avis_donnes;
@@ -303,6 +316,7 @@ require_once 'app/views/includes/head-header.php';
                                             </div>
                                         <?php endif; ?>
                                     </div>
+                                    <hr>
                                 </div>
                             <?php endforeach; ?>
                             <?php if (count($avis_list) > 3): ?>
@@ -325,6 +339,7 @@ require_once 'app/views/includes/head-header.php';
                     <div class="section-header">
                         <h3><i class="fas fa-cog"></i> Mes préférences</h3>
                     </div>
+                    <hr>
                     <div class="section-content">
                         <div class="preferences-display">
                             <div class="preference-item">

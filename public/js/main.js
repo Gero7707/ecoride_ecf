@@ -9,31 +9,55 @@ $(document).ready(function(){
 });
 
 
-//Validation côté client pour le mot de passe
-// document.getElementById('confirmer_mot_de_passe').addEventListener('input', function() {
-//     const password = document.getElementById('mot_de_passe').value;
-//     const confirm = this.value;
-    
-//     if (password !== confirm) {
-//         this.setCustomValidity('Les mots de passe ne correspondent pas');
-//     } else {
-//         this.setCustomValidity('');
-//     }
-// });
+// Validation côté client pour le mot de passe
+const confirmPasswordField = document.getElementById('confirmer_mot_de_passe');
+if (confirmPasswordField) {
+    confirmPasswordField.addEventListener('input', function() {
+        const password = document.getElementById('mot_de_passe').value;
+        const confirm = this.value;
+        
+        if (password !== confirm) {
+            this.setCustomValidity('Les mots de passe ne correspondent pas');
+        } else {
+            this.setCustomValidity('');
+        }
+    });
+}
 
-// //Afficher/masquer les mots de passe
-// document.getElementById('show_passwords').addEventListener('change', function() {
-//     const passwordField = document.getElementById('mot_de_passe');
-//     const confirmField = document.getElementById('confirmer_mot_de_passe');
+
+
+document.addEventListener('DOMContentLoaded', function() {
+    const showPasswordsCheckbox = document.getElementById('show_passwords');
     
-//     if (this.checked) {
-//         passwordField.type = 'text';
-//         confirmField.type = 'text';
-//     } else {
-//         passwordField.type = 'password';
-//         confirmField.type = 'password';
-//     }
-// });
+    if (showPasswordsCheckbox) {
+        showPasswordsCheckbox.addEventListener('change', function() {
+            // Pour la page de création de compte
+            const motDePasseField = document.getElementById('mot_de_passe');
+            const confirmerField = document.getElementById('confirmer_mot_de_passe');
+            
+            // Pour la page d'édition profil
+            const currentPasswordField = document.getElementById('current_password');
+            const newPasswordField = document.getElementById('new_password');
+            const confirmPasswordField = document.getElementById('confirm_password');
+            
+            if (this.checked) {
+                // Changer en texte si les champs existent
+                if (motDePasseField) motDePasseField.type = 'text';
+                if (confirmerField) confirmerField.type = 'text';
+                if (currentPasswordField) currentPasswordField.type = 'text';
+                if (newPasswordField) newPasswordField.type = 'text';
+                if (confirmPasswordField) confirmPasswordField.type = 'text';
+            } else {
+                // Remettre en password si les champs existent
+                if (motDePasseField) motDePasseField.type = 'password';
+                if (confirmerField) confirmerField.type = 'password';
+                if (currentPasswordField) currentPasswordField.type = 'password';
+                if (newPasswordField) newPasswordField.type = 'password';
+                if (confirmPasswordField) confirmPasswordField.type = 'password';
+            }
+        });
+    }
+});
 
 
 // Validation côté client pour le mot de passe - seulement si les éléments existent

@@ -38,29 +38,32 @@ require_once 'app/views/includes/head-header.php';
                 <div class="route-cities">
                     <div class="departure-city">
                         <i class="fas fa-circle departure-dot"></i>
-                        <h1><?= htmlspecialchars($covoiturage['ville_depart']) ?></h1>
                         <span class="city-label">Départ</span>
+                        <h1><?= htmlspecialchars($covoiturage['ville_depart']) ?></h1>
+                        <hr>
                     </div>
                     <div class="route-arrow">
                         <i class="fas fa-arrow-right"></i>
                     </div>
                     <div class="arrival-city">
                         <i class="fas fa-map-marker-alt arrival-dot"></i>
-                        <h1><?= htmlspecialchars($covoiturage['ville_arrivee']) ?></h1>
                         <span class="city-label">Arrivée</span>
+                        <h1><?= htmlspecialchars($covoiturage['ville_arrivee']) ?></h1>
+                        <hr>
                     </div>
                 </div>
                 
                 <div class="trip-datetime">
-                    <div class="trip-date">
+                    <div class="trip-date d-flex ">
                         <i class="fas fa-calendar-alt"></i>
                         <span><?= date('l d F Y', strtotime($covoiturage['date_depart'])) ?></span>
                     </div>
-                    <div class="trip-time">
+                    <hr>
+                    <div class="trip-time d-flex align-items-center">
                         <i class="fas fa-clock"></i>
                         <span>Départ à <?= date('H:i', strtotime($covoiturage['heure_depart'])) ?></span>
                         <?php if (!empty($covoiturage['heure_arrivee'])): ?>
-                            <span>• Arrivée à <?= date('H:i', strtotime($covoiturage['heure_arrivee'])) ?></span>
+                            <span> Arrivée à <?= date('H:i', strtotime($covoiturage['heure_arrivee'])) ?></span>
                         <?php endif; ?>
                     </div>
                 </div>
@@ -79,14 +82,17 @@ require_once 'app/views/includes/head-header.php';
                     <!-- Prix et disponibilité -->
                     <div class="price-availability-card">
                         <div class="price-section">
-                            <div class="price-amount">
+                            <div class="price-amount d-flex">
+                                <h3>€</h3>
                                 <span class="price-value"><?= number_format($covoiturage['prix'], 2, ',', ' ') ?>€</span>
                                 <span class="price-label">par personne</span>
                             </div>
-                            <div class="availability">
+                            <hr>
+                            <div class="availability d-flex">
                                 <i class="fas fa-users"></i>
                                 <span><?= $covoiturage['places_disponibles'] ?> place<?= $covoiturage['places_disponibles'] > 1 ? 's' : '' ?> disponible<?= $covoiturage['places_disponibles'] > 1 ? 's' : '' ?></span>
                             </div>
+                            <hr>
                         </div>
                         
                         <!-- Bouton de réservation -->
@@ -95,7 +101,6 @@ require_once 'app/views/includes/head-header.php';
                                 <form method="POST" action="/reservation/creer" class="reservation-form">
                                     <input type="hidden" name="covoiturage_id" value="<?= $covoiturage['id'] ?>">
                                     <button type="submit" class="btn btn-primary btn-reserve">
-                                        <i class="fas fa-ticket-alt"></i>
                                         Réserver ce trajet
                                     </button>
                                 </form>
@@ -117,34 +122,37 @@ require_once 'app/views/includes/head-header.php';
                             </div>
                         <?php endif; ?>
                     </div>
-
+                    <hr>
                     <!-- Informations du véhicule -->
                     <?php if (!empty($covoiturage['marque'])): ?>
                     <div class="vehicle-info-card">
-                        <h3><i class="fas fa-car"></i> Véhicule</h3>
                         <div class="vehicle-details">
                             <div class="vehicle-main">
-                                <h4><?= htmlspecialchars($covoiturage['marque'] . ' ' . $covoiturage['modele']) ?></h4>
-                                <div class="vehicle-specs">
+                                <div class="d-flex align-items-center car">
+                                    <i class="fas fa-car"></i>
+                                    <h4><?= htmlspecialchars($covoiturage['marque'] . ' ' . $covoiturage['modele']) ?></h4>
+                                </div>
+                                <div class="vehicle-specs d-flex flex-column align-items-start ">
                                     <?php if (!empty($covoiturage['couleur'])): ?>
-                                        <span class="spec"><i class="fas fa-palette"></i> <?= htmlspecialchars($covoiturage['couleur']) ?></span>
+                                        <span class="spec"><i class="fas fa-palette multicolor"></i> <?= htmlspecialchars($covoiturage['couleur']) ?></span>
                                     <?php endif; ?>
                                     <span class="spec"><i class="fas fa-users"></i> <?= $covoiturage['places_disponibles'] ?> places</span>
                                     <?php if (!empty($covoiturage['energie'])): ?>
                                         <span class="energy-badge energy-<?= $covoiturage['energie'] ?>">
-                                            <?= ucfirst($covoiturage['energie']) ?>
+                                            <i class="fa-solid fa-gas-pump"></i>  <?= ucfirst($covoiturage['energie']) ?>
                                         </span>
                                     <?php endif; ?>
                                 </div>
                             </div>
                         </div>
                     </div>
+                    <hr>
                     <?php endif; ?>
 
                     <!-- Statut du trajet -->
                     <div class="status-card">
-                        <h3><i class="fas fa-info-circle"></i> Statut du trajet</h3>
-                        <div class="status-info">
+                        <div class="status-info d-flex align-items-center">
+                            <i class="fas fa-info-circle"></i>
                             <span class="status-badge status-<?= $covoiturage['statut'] ?>">
                                 <?php
                                 $status_labels = [
@@ -160,6 +168,7 @@ require_once 'app/views/includes/head-header.php';
                                 Publié le <?= date('d/m/Y à H:i', strtotime($covoiturage['date_creation'])) ?>
                             </span>
                         </div>
+                        <hr>
                     </div>
                 </div>
 
@@ -167,36 +176,37 @@ require_once 'app/views/includes/head-header.php';
                 <div class="sidebar">
                     
                     <!-- Profil du chauffeur -->
-                    <div class="driver-card">
-                        <h3><i class="fas fa-user"></i> Votre chauffeur</h3>
-                        <div class="driver-profile">
-                            <div class="driver-avatar">
-                                <?php if (!empty($covoiturage['photo_chauffeur']) && file_exists($covoiturage['photo_chauffeur'])): ?>
-                                    <img src="<?= htmlspecialchars($covoiturage['photo_chauffeur']) ?>" alt="Photo de <?= htmlspecialchars($covoiturage['pseudo_chauffeur']) ?>" class="avatar-img">
-                                <?php else: ?>
-                                    <div class="avatar-placeholder">
-                                        <i class="fas fa-user"></i>
+                    <div class=" d-flex justify-content-center">
+                        <div class="driver-card">
+                            <h3 class="d-flex align-items-center"><i class="fas fa-user"></i> Chauffeur :</h3>
+                            <div class="driver-profile d-flex">
+                                <div class="driver-avatar">
+                                    <?php if (!empty($covoiturage['photo_chauffeur']) && file_exists($covoiturage['photo_chauffeur'])): ?>
+                                        <img src="<?= htmlspecialchars($covoiturage['photo_chauffeur']) ?>" alt="Photo de <?= htmlspecialchars($covoiturage['pseudo_chauffeur']) ?>" class="avatar-img">
+                                    <?php else: ?>
+                                        <div class="avatar-placeholder">
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <div class="driver-info ">
+                                    <h4><?= htmlspecialchars($covoiturage['pseudo']) ?></h4>
+                                    <?php if (isset($covoiturage['note_moyenne']) && $covoiturage['note_moyenne'] > 0): ?>
+                                        <div class="driver-rating">
+                                            <?php for ($i = 1; $i <= 5; $i++): ?>
+                                                <i class="fas fa-star<?= $i <= round($covoiturage['note_moyenne']) ? ' star-filled' : ' star-empty' ?>"></i>
+                                            <?php endfor; ?>
+                                            <span class="rating-text"><?= number_format($covoiturage['note_moyenne'], 1) ?>/5</span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <div class="driver-stats">
+                                        <span><i class="fas fa-route"></i> <?= $covoiturage['nb_trajets_chauffeur'] ?? 'N/A' ?> trajets</span>
                                     </div>
-                                <?php endif; ?>
-                            </div>
-                            <div class="driver-info">
-                                <h4><?= htmlspecialchars($covoiturage['pseudo']) ?></h4>
-                                <?php if (isset($covoiturage['note_moyenne']) && $covoiturage['note_moyenne'] > 0): ?>
-                                    <div class="driver-rating">
-                                        <?php for ($i = 1; $i <= 5; $i++): ?>
-                                            <i class="fas fa-star<?= $i <= round($covoiturage['note_moyenne']) ? ' star-filled' : ' star-empty' ?>"></i>
-                                        <?php endfor; ?>
-                                        <span class="rating-text"><?= number_format($covoiturage['note_moyenne'], 1) ?>/5</span>
-                                    </div>
-                                <?php endif; ?>
-                                <div class="driver-stats">
-                                    <span><i class="fas fa-route"></i> <?= $covoiturage['nb_trajets_chauffeur'] ?? 'N/A' ?> trajets</span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-                    <!-- Avis sur le chauffeur -->
+                    <hr>
+                    
                     <?php if (!empty($avis_chauffeur)): ?>
                     <div class="reviews-card">
                         <h3><i class="fas fa-star"></i> Avis sur le chauffeur</h3>
@@ -219,6 +229,7 @@ require_once 'app/views/includes/head-header.php';
                                     <div class="review-date">
                                         <?= date('d/m/Y', strtotime($avis['date_creation'])) ?>
                                     </div>
+                                    <hr>
                                 </div>
                             <?php endforeach; ?>
                         </div>

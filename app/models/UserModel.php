@@ -34,7 +34,8 @@ class UserModel {
                     email = ?, 
                     telephone = ?, 
                     adresse = ?,
-                    photo = ?
+                    photo = ?,
+                    statut = ?
                     WHERE id = ?";
             
             $stmt = $this->db->prepare($sql);
@@ -44,6 +45,7 @@ class UserModel {
                 $data['telephone'] ?? null,
                 $data['adresse'] ?? null,
                 $data['photo'] ?? null,
+                $data['statut'] ?? 'passager',
                 $id
             ]);
         } catch (PDOException $e) {

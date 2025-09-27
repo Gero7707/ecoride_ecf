@@ -7,7 +7,7 @@ require_once 'app/views/includes/head-header.php';
         <section class="search-section">
             <div class="container">
                 <h2>Trouvez votre covoiturage</h2>
-                <p></p>Recherchez parmi nos trajets écologiques et économiques</p>
+                <p>Recherchez parmi nos trajets écologiques et économiques</p>
                 
                 <form action="/covoiturages" method="GET" class="search-form">
                     <div class="search-inputs">
@@ -26,11 +26,10 @@ require_once 'app/views/includes/head-header.php';
                         </div>
                         
                         <div class="input-group">
-                            <label for="date">Date de départ (optionnel)</label>
+                            <label for="date">Date de départ</label>
                             <input type="date" id="date" name="date" 
                                     value="<?= isset($_GET['date']) ? htmlspecialchars($_GET['date']) : '' ?>"
                                     min="<?= date('Y-m-d') ?>">
-                            <small>Laissez vide pour voir tous les trajets futurs</small>
                         </div>
                         
                         <div class="input-group">
@@ -44,7 +43,7 @@ require_once 'app/views/includes/head-header.php';
         <!-- Section filtres (affichée seulement si recherche effectuée) -->
         <?php if (isset($_GET['depart']) && isset($_GET['arrivee'])): ?>
         <section class="filters-section">
-            <div class="container">
+            <div class="container text-center">
                 <h3>Filtrer les résultats</h3>
                 <div class="filters">
                     <div class="filter-group">

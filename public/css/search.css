@@ -86,7 +86,6 @@ nav , footer  {
 }
 
 .search-form {
-    max-width: 800px;
     margin: 0 auto;
     background: white;
     padding: 2rem;
@@ -179,7 +178,8 @@ nav , footer  {
     padding: 2rem 0;
     border-radius: 10px;
     box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-    margin: 1em;
+    margin: 1em auto;
+    max-width: 60em;
 }
 
 .filters {
@@ -200,6 +200,11 @@ nav , footer  {
     font-weight: 500;
 }
 
+.filter-group select,.filter-group input {
+    max-width: 10em;
+    margin: auto;
+}
+
 .results-section {
     padding: 2rem 0;
     background: linear-gradient(135deg, #2d5016, #4a7c25);
@@ -212,6 +217,8 @@ nav , footer  {
     flex-direction: column;
     gap: 1.5rem;
     margin-top: 1.5rem;
+    max-width: 31em;
+    margin: auto;
 }
 
 
@@ -262,7 +269,6 @@ nav , footer  {
 .driver-info, .booking-info {
     display: flex;
     flex-direction: column;
-    gap: 0.5rem;
 }
 .driver-name {
     display: flex;
@@ -282,7 +288,6 @@ nav , footer  {
     gap: 3.5em;
     font-size: 1.5em;
     margin-left: 2.2em;
-    margin-top: 1em;
 }
 
 .gif {
@@ -290,19 +295,20 @@ nav , footer  {
     width: 25%;
 }
 .gif2{
-    width: 50%;
+    width: 40%;
 }
 
 .driver-img{
-    width: 25%;
+    width: 16%;
 }
 
 .etoile{
-    width: 15%;
+    width: 10%;
+    height: 10%;
 }
 
 .price, .places {
-    font-size: 1.25rem;
+    font-size: 1rem;
     color: #4a7c25;
     font-weight: bold;
     text-align: center;
@@ -368,6 +374,7 @@ nav , footer  {
 
 /* Responsive */
 @media (max-width: 992px) {
+    
     .navbar-toggler {
         color: #ddd;
     }
@@ -418,6 +425,10 @@ nav , footer  {
 }
 
 @media (max-width: 768px) {
+    .search-form,.filters-section,.covoiturage-list{
+        max-width: 21em;
+    }
+
     .search-inputs {
         grid-template-columns: 1fr;
     }

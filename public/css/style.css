@@ -177,6 +177,7 @@ nav , footer  {
     background: #f8f9fa;
     border: 1px solid #e0e0e0;
     transition: transform 0.3s, box-shadow 0.3s;
+    max-width: 25em;
 }
 
 .feature p {
@@ -264,6 +265,9 @@ nav , footer  {
     padding: 1rem;
     border-radius: 5px;
     margin-bottom: 1rem;
+    max-width: 25em;
+    text-align: center;
+    margin: auto;
 }
 
 .alert-error {
@@ -407,6 +411,8 @@ nav , footer  {
     font-weight: 500;
 }
 
+
+
 .results-section {
     padding: 2rem 0;
 }
@@ -484,7 +490,6 @@ nav , footer  {
     gap: 3.5em;
     font-size: 1.5em;
     margin-left: 2.2em;
-    margin-top: 1em;
 }
 
 .gif {
@@ -492,15 +497,16 @@ nav , footer  {
     width: 25%;
 }
 .gif2{
-    width: 50%;
+    width: 40%;
 }
 
 .driver-img{
-    width: 25%;
+    width: 16%;
 }
 
 .etoile{
-    width: 15%;
+    width: 10%;
+    height: 10%;
 }
 
 
@@ -593,6 +599,10 @@ footer a:hover {
 
 /* Responsive */
 @media (max-width: 992px) {
+    .feature{
+        margin: auto;
+    }
+    
     .navbar-toggler {
         color: #ddd;
     }
