@@ -12,6 +12,7 @@ require_once 'config/database.php';
 require_once 'app/controllers/AuthController.php';
 require_once 'app/controllers/CovoiturageController.php';
 require_once 'app/controllers/AccountController.php';
+require_once 'app/controllers/ReservationController.php';
 
 // Récupération de l'URL demandée
 $request = $_SERVER['REQUEST_URI'];
@@ -61,6 +62,21 @@ switch ($path) {
         // Page détail d'un covoiturage
         $covoiturageController = new CovoiturageController($pdo);
         $covoiturageController->details($matches[1]);
+        break;
+
+    case '/reservation/creer':
+        $reservationController = new ReservationController($pdo);
+        $reservationController->createReservation();
+        break;
+        
+    case '/reservation/annuler':
+        $reservationController = new ReservationController($pdo);
+        $reservationController->cancelReservation();
+        break;
+
+    case '/reservation/confirmer':
+        $reservationController = new ReservationController($pdo);
+        $reservationController->confirmReservation();
         break;
         
     case '/connexion':

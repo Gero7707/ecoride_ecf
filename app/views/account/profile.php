@@ -200,6 +200,7 @@ require_once 'app/views/includes/head-header.php';
                                                 <span class="infos"><i class="fas fa-euro-sign"></i> <?= $covoit['prix'] ?>€</span>
                                             </div>
                                         </div>
+                                        
                                         <div class="trip-status">
                                             <span class="status-badge status-<?= $covoit['statut'] ?>">
                                                 <?= ucfirst(str_replace('_', ' ', $covoit['statut'])) ?>
@@ -257,9 +258,28 @@ require_once 'app/views/includes/head-header.php';
                                             <span class="status-badge status-<?= $reservation['statut'] ?>">
                                                 <?= ucfirst($reservation['statut']) ?>
                                             </span>
+                                            
+                                            <div class="trip-actions">
+                                                <a href="/covoiturage/<?= $reservation['covoiturage_id'] ?>" class="btn btn-outline btn-sm">
+                                                    <i class="fas fa-eye"></i>
+                                                    Détails
+                                                </a>
+
+                                                <?php if ($reservation['statut'] === 'confirmee' && strtotime($reservation['date_depart'] . ' ' . $reservation['heure_depart']) > time() + 2*3600): ?>
+                                                    <form method="POST" action="/reservation/annuler" style="display: inline;">
+                                                        <input type="hidden" name="reservation_id" value="<?= $reservation['id'] ?>">
+                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')                             ">
+                                                            <i class="fas fa-times"></i>
+                                                            Annuler
+                                                        </button>
+                                                    </form>
+                                                <?php endif; ?>
+                                            </div>
                                         </div>
                                         <hr>
                                     </div>
+
+                                    
                                 </div>
                             <?php endforeach; ?>
                             <?php if (count($mes_reservations) > 5): ?>

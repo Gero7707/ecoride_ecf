@@ -33,6 +33,9 @@ nav , footer  {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+.section-header a{
+    margin-left: 1em;
+}
 
 .navbar-nav .nav-item .nav-link {
     color: #ddd !important;
@@ -129,6 +132,33 @@ nav , footer  {
 
 .trip-meta span i,.vehicle-info-small i{
     margin-right: 1em;
+}
+
+.trip-actions {
+    display: flex;
+    gap: 0.5rem;
+    margin-top: 1rem;
+    padding-top: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    color: #ddd;
+    font-size: 0.85rem;
+    background: #4a7c25;
+}
+
+.btn-danger {
+    background: #dc3545;
+    color: white;
+    border: 1px solid #dc3545;
+}
+
+.btn-danger:hover {
+    background: #c82333;
+    border-color: #c82333;
+    color: white;
 }
 /* Footer */
 footer {

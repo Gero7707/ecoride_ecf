@@ -366,4 +366,23 @@ class UserModel {
             return false;
         }
     }
+
+    public function deductCredits($userId, $amount) {
+        $sql = "UPDATE utilisateur SET credits = credits - ? WHERE id = ? AND credits >= ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$amount, $userId, $amount]);
+    }
+    
+    public function addCredits($userId, $amount) {
+        $sql = "UPDATE utilisateur SET credits = credits + ? WHERE id = ?";
+        $stmt = $this->db->prepare($sql);
+        return $stmt->execute([$amount, $userId]);
+    }
+    
+    public function getUserCredits($userId) {
+        $stmt = $this->db->prepare("SELECT credits FROM utilisateur WHERE id = ?");
+        $stmt->execute([$userId]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result ? $result['credits'] : 0;
+    }
 }

@@ -227,11 +227,8 @@ class AccountController {
         $_SESSION['user_pseudo'] = $pseudo;
         $_SESSION['user_statut'] = $statut;
         
-        if ($statut === 'chauffeur') {
-            $_SESSION['success'] = 'Profil mis à jour ! Vous êtes maintenant chauffeur et pouvez proposer des trajets.';
-        } else {
-            $_SESSION['success'] = 'Profil mis à jour ! Vous êtes maintenant passager.';
-        }
+        $_SESSION['success'] = 'Profil mis à jour avec succès !';
+        
         header('Location: /mon-compte');
         exit();
     }

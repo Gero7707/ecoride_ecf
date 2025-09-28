@@ -129,6 +129,14 @@ nav , footer  {
 }
 
 
+.alert-success{
+    margin: 0;
+}
+
+.flash-messages{
+    background: linear-gradient(135deg, #2d5016, #4a7c25);
+}
+
 
 .star-filled,.fa-star{
     color: rgb(215, 215, 42);
