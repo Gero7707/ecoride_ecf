@@ -260,5 +260,6 @@ require_once 'app/views/includes/head-header.php';
     </section>
 </main>
 <?php
+$pageSpecificJs = 'covoiturage.js';
 require_once 'app/views/includes/footer.php';
 ?>

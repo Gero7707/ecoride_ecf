@@ -224,7 +224,7 @@ require_once 'app/views/includes/head-header.php'
                     </div>
 
                     <div class="price-calculator mb-3">
-                        <button type="button" class="btn btn-outline btn-sm mb-3"  onclick="calculatePrice()">
+                        <button type="button" class="btn btn-outline btn-sm mb-3"  id="calculateButton">
                             <i class="fas fa-calculator"></i>
                             Calculer le prix recommandé
                         </button>
@@ -289,5 +289,6 @@ require_once 'app/views/includes/head-header.php'
 </main>
 
 <?php
+$pageSpecificJs = 'covoiturage.js';
 require_once 'app/views/includes/footer.php';
 ?>

@@ -175,5 +175,6 @@ require_once 'app/views/includes/head-header.php';
 
 
 <?php 
+$pageSpecificJs = 'covoiturage.js';
 require_once 'app/views/includes/footer.php';
 ?>

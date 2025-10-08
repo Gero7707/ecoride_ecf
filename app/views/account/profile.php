@@ -426,5 +426,6 @@ require_once 'app/views/includes/head-header.php';
 </div>
 
 <?php
+$pageSpecificJs = 'vehicle.js';
 require_once 'app/views/includes/footer.php';
 ?>

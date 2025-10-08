@@ -294,5 +294,6 @@ require_once 'app/views/includes/head-header.php';
 
 
 <?php
+$pageSpecificJs = 'auth.js';
 require_once 'app/views/includes/footer.php';
 ?>
