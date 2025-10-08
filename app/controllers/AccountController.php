@@ -233,41 +233,198 @@ class AccountController {
         exit();
     }
     
-    /**
-     * Gérer l'upload de photo de profil
-     */
-    private function handlePhotoUpload($file) {
-        // Vérifications de sécurité
-        $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif'];
-        $maxSize = 5 * 1024 * 1024; // 5MB
+
+/* Gérer l'upload de photo de profil avec compression
+ */
+private function handlePhotoUpload($file) {
+    // Vérifications de sécurité
+    $allowedTypes = ['image/jpeg', 'image/jpg', 'image/png', 'image/gif', 'image/webp'];
+    $maxSize = 5 * 1024 * 1024; // 5MB
+    $profileMaxSize = 100 * 1024; // 100KB pour le fichier final
+    $profileDimensions = [300, 300]; // Dimensions max pour avatar
+    $jpegQuality = 85;
+    
+    if (!in_array($file['type'], $allowedTypes)) {
+        return ['success' => false, 'error' => 'Format de fichier non autorisé. Utilisez JPG, PNG, GIF ou WebP.'];
+    }
+    
+    if ($file['size'] > $maxSize) {
+        return ['success' => false, 'error' => 'Le fichier est trop volumineux (max 5MB).'];
+    }
+    
+    // Vérifier si c'est vraiment une image
+    $imageInfo = getimagesize($file['tmp_name']);
+    if (!$imageInfo) {
+        return ['success' => false, 'error' => 'Le fichier n\'est pas une image valide.'];
+    }
+    
+    // Créer le dossier s'il n'existe pas
+    $uploadDir = 'public/uploads/avatars/';
+    if (!is_dir($uploadDir)) {
+        mkdir($uploadDir, 0777, true);
+    }
+    
+    try {
+        // Informations sur l'image originale
+        $originalWidth = $imageInfo[0];
+        $originalHeight = $imageInfo[1];
+        $mimeType = $imageInfo['mime'];
         
-        if (!in_array($file['type'], $allowedTypes)) {
-            return ['success' => false, 'error' => 'Format de fichier non autorisé. Utilisez JPG, PNG ou GIF.'];
+        // Créer la ressource image selon le type
+        $sourceImage = $this->createImageResource($file['tmp_name'], $mimeType);
+        if (!$sourceImage) {
+            return ['success' => false, 'error' => 'Impossible de traiter l\'image.'];
         }
         
-        if ($file['size'] > $maxSize) {
-            return ['success' => false, 'error' => 'Le fichier est trop volumineux (max 5MB).'];
+        // Calculer les nouvelles dimensions (carré pour avatar)
+        $newDimensions = $this->calculateAvatarDimensions($originalWidth, $originalHeight, $profileDimensions);
+        
+        // Créer l'image redimensionnée
+        $resizedImage = imagecreatetruecolor($newDimensions['width'], $newDimensions['height']);
+        
+        // Préserver la transparence pour PNG et GIF
+        if ($mimeType === 'image/png' || $mimeType === 'image/gif') {
+            imagealphablending($resizedImage, false);
+            imagesavealpha($resizedImage, true);
+            $transparent = imagecolorallocatealpha($resizedImage, 255, 255, 255, 127);
+            imagefill($resizedImage, 0, 0, $transparent);
         }
         
-        // Créer le dossier s'il n'existe pas
-        $uploadDir = 'public/uploads/avatars/';
-        if (!is_dir($uploadDir)) {
-            mkdir($uploadDir, 0777, true);
-        }
+        // Redimensionner l'image
+        imagecopyresampled(
+            $resizedImage, $sourceImage,
+            0, 0, 0, 0,
+            $newDimensions['width'], $newDimensions['height'],
+            $originalWidth, $originalHeight
+        );
         
         // Générer un nom unique
-        $extension = pathinfo($file['name'], PATHINFO_EXTENSION);
-        $fileName = 'avatar_' . $_SESSION['user_id'] . '_' . time() . '.' . $extension;
+        $fileName = 'avatar_' . $_SESSION['user_id'] . '_' . time() . '.jpg'; // Forcer en JPEG pour compression
         $filePath = $uploadDir . $fileName;
         
-        // Déplacer le fichier
-        if (move_uploaded_file($file['tmp_name'], $filePath)) {
-            return ['success' => true, 'path' => $filePath];
+        // Sauvegarder avec compression JPEG
+        $saved = imagejpeg($resizedImage, $filePath, $jpegQuality);
+        
+        // Nettoyer la mémoire
+        imagedestroy($sourceImage);
+        imagedestroy($resizedImage);
+        
+        if (!$saved) {
+            return ['success' => false, 'error' => 'Erreur lors de la sauvegarde.'];
+        }
+        
+        // Vérifier la taille finale et compresser davantage si nécessaire
+        $finalSize = filesize($filePath);
+        if ($finalSize > $profileMaxSize) {
+            $this->aggressiveCompress($filePath, $profileMaxSize);
+            $finalSize = filesize($filePath);
+        }
+        
+        // Supprimer l'ancien avatar s'il existe
+        $this->removeOldAvatar($_SESSION['user_id'], $fileName);
+        
+        return [
+            'success' => true, 
+            'path' => $filePath,
+            'fileName' => $fileName,
+            'originalSize' => $file['size'],
+            'finalSize' => $finalSize,
+            'compressionRatio' => round((1 - ($finalSize / $file['size'])) * 100, 1),
+            'dimensions' => $newDimensions
+        ];
+        
+    } catch (Exception $e) {
+        return ['success' => false, 'error' => 'Erreur technique : ' . $e->getMessage()];
+    }
+}
+
+/**
+ * Créer une ressource image selon le type MIME
+ */
+private function createImageResource($filePath, $mimeType) {
+    switch ($mimeType) {
+        case 'image/jpeg':
+        case 'image/jpg':
+            return imagecreatefromjpeg($filePath);
+        case 'image/png':
+            return imagecreatefrompng($filePath);
+        case 'image/gif':
+            return imagecreatefromgif($filePath);
+        case 'image/webp':
+            return imagecreatefromwebp($filePath);
+        default:
+            return false;
+    }
+}
+
+/**
+ * Calculer les dimensions pour un avatar (format carré centré)
+ */
+private function calculateAvatarDimensions($originalWidth, $originalHeight, $targetDimensions) {
+    $targetSize = min($targetDimensions[0], $targetDimensions[1]); // Prendre la plus petite dimension pour un carré
+    
+    // Si l'image est déjà plus petite, la redimensionner quand même pour uniformiser
+    if ($originalWidth <= $targetSize && $originalHeight <= $targetSize) {
+        $size = max($originalWidth, $originalHeight); // Prendre la plus grande pour remplir le carré
+        return ['width' => $size, 'height' => $size];
+    }
+    
+    // Pour un avatar, on veut un carré, donc on prend la dimension cible
+    return ['width' => $targetSize, 'height' => $targetSize];
+}
+
+/**
+ * Compression agressive si le fichier dépasse encore la limite
+ */
+private function aggressiveCompress($filePath, $maxSize) {
+    $currentSize = filesize($filePath);
+    $quality = 85;
+    
+    while ($currentSize > $maxSize && $quality > 30) {
+        $quality -= 10;
+        
+        // Recharger et recompresser
+        $image = imagecreatefromjpeg($filePath);
+        if ($image) {
+            imagejpeg($image, $filePath, $quality);
+            imagedestroy($image);
+            $currentSize = filesize($filePath);
         } else {
-            return ['success' => false, 'error' => 'Erreur lors de l\'upload du fichier.'];
+            break; // Arrêter si on ne peut plus charger l'image
         }
     }
     
+    return $currentSize;
+}
+
+/**
+ * Supprimer l'ancien avatar de l'utilisateur
+ */
+private function removeOldAvatar($userId, $newFileName) {
+    $uploadDir = 'public/uploads/avatars/';
+    $pattern = $uploadDir . 'avatar_' . $userId . '_*';
+    
+    foreach (glob($pattern) as $oldFile) {
+        $oldFileName = basename($oldFile);
+        // Ne pas supprimer le nouveau fichier qu'on vient de créer
+        if ($oldFileName !== $newFileName && is_file($oldFile)) {
+            unlink($oldFile);
+        }
+    }
+}
+
+/**
+ * Formater les octets en format lisible
+ */
+private function formatBytes($bytes, $precision = 2) {
+    $units = ['B', 'KB', 'MB', 'GB'];
+    
+    for ($i = 0; $bytes > 1024 && $i < count($units) - 1; $i++) {
+        $bytes /= 1024;
+    }
+    
+    return round($bytes, $precision) . ' ' . $units[$i];
+}
     /**
      * Supprimer la photo de profil
      */

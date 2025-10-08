@@ -114,6 +114,11 @@ class CovoiturageController {
      */
     private function showCreateForm() {
         // TODO: Récupérer les véhicules du chauffeur
+        require_once 'app/models/UserModel.php';
+        $userModel = new UserModel();
+        $vehicules = $userModel->getUserVehicles($_SESSION['user_id']);
+        
+        // Charger la vue
         include 'app/views/covoiturage/create.php';
     }
     

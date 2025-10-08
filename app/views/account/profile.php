@@ -166,6 +166,18 @@ require_once 'app/views/includes/head-header.php';
                                             </span>
                                         </div>
                                     </div>
+        
+                                    <!-- Boutons d'action -->
+                                    <div class="vehicle-actions">
+                                        <button 
+                                            class="btn btn-sm btn-danger delete-vehicle-btn" 
+                                            data-vehicle-id="<?= $vehicule['id'] ?>"
+                                            data-vehicle-name="<?= htmlspecialchars($vehicule['marque'] . ' ' . $vehicule['modele']) ?>"
+                                            title="Supprimer">
+                                            <i class="fas fa-trash"></i> Supprimer
+                                        </button>
+                                    </div>
+                                    <hr>
                                 </div>
                             <?php endforeach; ?>
                         <?php else: ?>
@@ -176,7 +188,7 @@ require_once 'app/views/includes/head-header.php';
                             </div>
                         <?php endif; ?>
                     </div>
-                    <hr>
+                    
                 </div>
                 
 
@@ -210,7 +222,7 @@ require_once 'app/views/includes/head-header.php';
                                     <hr>
                                 </div>
                             <?php endforeach; ?>
-                            <?php if (count($mes_covoiturages) > 5): ?>
+                            <?php if (count($mes_covoiturages) > 3): ?>
                                 <div class="show-more">
                                     <a href="/mes-covoiturages" class="btn btn-outline">Voir tous mes covoiturages</a>
                                 </div>
@@ -289,7 +301,6 @@ require_once 'app/views/includes/head-header.php';
                             <?php endif; ?>
                         <?php else: ?>
                             <div class="empty-state">
-                                <i class="fas fa-ticket-alt"></i>
                                 <p>Aucune réservation</p>
                                 <a href="/covoiturages" class="btn btn-primary">Rechercher un trajet</a>
                             </div>
@@ -385,6 +396,34 @@ require_once 'app/views/includes/head-header.php';
         </div>
     </section>
 </main>
+<div id="deleteModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Confirmer la suppression</h3>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer ce véhicule ?</p>
+            <div class="vehicle-info-modal">
+                <i class="fas fa-car"></i>
+                <strong id="vehicleName"></strong>
+            </div>
+            <p class="warning-text">
+                <i class="fas fa-info-circle"></i>
+                Cette action est irréversible.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeModal">
+                <i class="fas fa-times"></i> Annuler
+            </button>
+            <form id="deleteForm" method="POST" style="display: inline;">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 
 <?php
 require_once 'app/views/includes/footer.php';

@@ -13,6 +13,7 @@ require_once 'app/controllers/AuthController.php';
 require_once 'app/controllers/CovoiturageController.php';
 require_once 'app/controllers/AccountController.php';
 require_once 'app/controllers/ReservationController.php';
+require_once 'app/controllers/VehiculeController.php';
 
 // Récupération de l'URL demandée
 $request = $_SERVER['REQUEST_URI'];
@@ -64,6 +65,25 @@ switch ($path) {
         $covoiturageController->details($matches[1]);
         break;
 
+    case '/covoiturage/creer':
+    case '/covoiturage/proposer':
+        // Créer un covoiturage
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté pour créer un covoiturage';
+            header('Location: /connexion');
+            exit();
+        }
+        
+        if ($_SESSION['user_statut'] !== 'chauffeur') {
+            $_SESSION['error'] = 'Vous devez être chauffeur pour créer un covoiturage';
+            header('Location: /profil');
+            exit();
+        }
+        
+        $covoiturageController = new CovoiturageController($pdo);
+        $covoiturageController->create();
+        break;
+
     case '/reservation/creer':
         $reservationController = new ReservationController($pdo);
         $reservationController->createReservation();
@@ -77,6 +97,40 @@ switch ($path) {
     case '/reservation/confirmer':
         $reservationController = new ReservationController($pdo);
         $reservationController->confirmReservation();
+        break;
+
+    case '/vehicule/ajouter':
+        // Ajouter un véhicule
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+        
+        if ($_SESSION['user_statut'] !== 'chauffeur') {
+            $_SESSION['error'] = 'Vous devez être chauffeur pour ajouter un véhicule';
+            header('Location: /profil');
+            exit();
+        }
+        
+        require_once 'app/controllers/VehiculeController.php';
+        $vehiculeController = new VehiculeController($pdo);
+        
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $vehiculeController->processAdd();
+        } else {
+            $vehiculeController->showAddForm();
+        }
+        break;
+    
+    case (preg_match('#^/vehicule/supprimer/(\d+)$#', $path, $matches) ? true : false):
+        // Supprimer un véhicule
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+        
+        $vehiculeController = new VehiculeController($pdo);
+        $vehiculeController->delete($matches[1]);
         break;
         
     case '/connexion':

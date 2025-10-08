@@ -177,6 +177,109 @@ footer a:hover {
     text-decoration: underline;
 }
 
+.vehicle-actions {
+    margin-top: 15px;
+    padding-top: 15px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+}
+
+.vehicle-actions .btn {
+    flex: 1;
+}
+
+/* Modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideIn 0.3s ease;
+}
+
+@keyframes slideIn {
+    from {
+        transform: translateY(-50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.modal-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #dc3545;
+    font-size: 1.3rem;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.vehicle-info-modal {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.vehicle-info-modal i {
+    font-size: 1.5rem;
+    color: #6c757d;
+}
+
+.warning-text {
+    color: #856404;
+    background: #fff3cd;
+    padding: 10px;
+    border-radius: 5px;
+    border-left: 3px solid #ffc107;
+}
+
+.modal-footer {
+    padding: 15px 25px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-footer .btn {
+    min-width: 120px;
+}
+
+@media (max-width: 768px) {
+    .vehicle-actions {
+        flex-direction: column;
+    }
+}
+
+
 
 
 

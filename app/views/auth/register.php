@@ -68,5 +68,6 @@ require_once 'app/views/includes/head-header.php';
     </main>
 
 <?php 
+$pageSpecificJs = 'auth.js';
 require_once 'app/views/includes/footer.php';   
 ?>
