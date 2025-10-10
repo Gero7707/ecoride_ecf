@@ -311,4 +311,62 @@ class ReservationController {
         // Charger la vue de la liste
         include 'app/views/reservation/list.php';
     }
+
+    /**
+ * Supprimer une réservation annulée
+ */
+    public function deleteReservation() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /profil');
+            exit();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+
+        $reservationId = isset($_POST['reservation_id']) ? intval($_POST['reservation_id']) : 0;
+
+        error_log("Tentative de suppression de la réservation #$reservationId par l'utilisateur #{$_SESSION['user_id']}");
+
+        try {
+            // Vérifier que la réservation appartient à l'utilisateur et est annulée
+            $stmt = $this->pdo->prepare("
+                SELECT id, statut 
+                FROM reservation 
+                WHERE id = ? AND passager_id = ?
+            ");
+            $stmt->execute([$reservationId, $_SESSION['user_id']]);
+            $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            error_log("Réservation trouvée : " . print_r($reservation, true));
+
+            if (!$reservation) {
+                $_SESSION['error'] = 'Réservation introuvable';
+                header('Location: /profil');
+                exit();
+            }
+
+            if ($reservation['statut'] !== 'annulee') {
+                $_SESSION['error'] = 'Seules les réservations annulées peuvent être supprimées';
+                header('Location: /profil');
+                exit();
+            }
+
+            // Supprimer la réservation
+            $stmt = $this->pdo->prepare("DELETE FROM reservation WHERE id = ?");
+            $stmt->execute([$reservationId]);
+
+            $_SESSION['success'] = 'Réservation supprimée avec succès';
+            header('Location: /profil');
+            exit();
+
+        } catch (PDOException $e) {
+            error_log('Erreur suppression réservation: ' . $e->getMessage());
+            $_SESSION['error'] = 'Erreur lors de la suppression';
+            header('Location: /profil');
+            exit();
+        }
+    }
 }

@@ -3,16 +3,18 @@
  * Contrôleur de gestion du compte utilisateur
  * Gère l'affichage et la modification du profil
  */
-
 require_once 'app/models/UserModel.php';
+require_once 'app/models/ReservationModel.php';
 
 class AccountController {
     private $pdo;
     private $userModel;
+    private $reservationModel;
     
     public function __construct($pdo) {
         $this->pdo = $pdo;
         $this->userModel = new UserModel();
+        $this->reservationModel = new ReservationModel();
     }
     
     /**
@@ -57,7 +59,7 @@ class AccountController {
             $data['preferences'] = $this->userModel->getChauffeurPreferences($userId);
         } else {
             // Données spécifiques au passager
-            $data['mes_reservations'] = $this->userModel->getUserReservations($userId);
+            $data['mes_reservations'] = $this->reservationModel->getUserReservations($userId);
             $data['avis_donnes'] = $this->userModel->getGivenReviews($userId);
         }
         // Extraire les variables pour la vue

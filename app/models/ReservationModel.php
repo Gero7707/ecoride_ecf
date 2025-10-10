@@ -99,7 +99,7 @@ class ReservationModel {
     public function getReservationById($id) {
         try {
             $sql = "SELECT r.*, c.date_depart, c.heure_depart, c.prix, c.statut as statut_covoiturage,
-                           c.ville_depart, c.ville_arrivee, c.chauffeur_id
+                            c.ville_depart, c.ville_arrivee, c.chauffeur_id
                     FROM reservation r 
                     JOIN covoiturage c ON r.covoiturage_id = c.id 
                     WHERE r.id = ?";
@@ -167,15 +167,23 @@ class ReservationModel {
     public function getUserReservations($userId) {
         try {
             $sql = "SELECT r.*, c.ville_depart, c.ville_arrivee, c.date_depart, c.heure_depart, 
-                           c.prix, c.statut as statut_covoiturage, u.pseudo as chauffeur_pseudo,
-                           v.marque, v.modele, v.couleur
+                            c.prix, c.id as covoiturage_id, c.statut as statut_covoiturage, 
+                            u.pseudo as chauffeur_pseudo, v.marque, v.modele, v.couleur
                     FROM reservation r 
                     JOIN covoiturage c ON r.covoiturage_id = c.id 
                     JOIN utilisateur u ON c.chauffeur_id = u.id 
                     LEFT JOIN vehicule v ON c.vehicule_id = v.id 
                     WHERE r.passager_id = ? 
-                    ORDER BY c.date_depart DESC";
-            
+                    ORDER BY 
+                        CASE r.statut
+                            WHEN 'confirmee' THEN 1
+                            WHEN 'en_attente' THEN 2
+                            WHEN 'terminee' THEN 3
+                            WHEN 'annulee' THEN 4
+                            ELSE 5
+                        END,
+                        c.date_depart DESC";
+
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$userId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -191,8 +199,8 @@ class ReservationModel {
     public function getDriverReservations($driverId) {
         try {
             $sql = "SELECT r.*, c.ville_depart, c.ville_arrivee, c.date_depart, c.heure_depart,
-                           u.pseudo as passager_pseudo, u.telephone as passager_telephone,
-                           u.email as passager_email
+                            u.pseudo as passager_pseudo, u.telephone as passager_telephone,
+                            u.email as passager_email
                     FROM reservation r 
                     JOIN covoiturage c ON r.covoiturage_id = c.id 
                     JOIN utilisateur u ON r.passager_id = u.id 
@@ -214,13 +222,13 @@ class ReservationModel {
     public function getReservationWithDetails($reservationId) {
         try {
             $sql = "SELECT r.*, 
-                           c.ville_depart, c.ville_arrivee, c.date_depart, c.heure_depart, 
-                           c.heure_arrivee, c.prix, c.statut as statut_covoiturage,
-                           chauffeur.pseudo as chauffeur_pseudo, chauffeur.telephone as chauffeur_telephone,
-                           chauffeur.email as chauffeur_email,
-                           passager.pseudo as passager_pseudo, passager.telephone as passager_telephone,
-                           passager.email as passager_email,
-                           v.marque, v.modele, v.couleur, v.plaque_immatriculation
+                            c.ville_depart, c.ville_arrivee, c.date_depart, c.heure_depart, 
+                            c.heure_arrivee, c.prix, c.statut as statut_covoiturage,
+                            chauffeur.pseudo as chauffeur_pseudo, chauffeur.telephone as chauffeur_telephone,
+                            chauffeur.email as chauffeur_email,
+                            passager.pseudo as passager_pseudo, passager.telephone as passager_telephone,
+                            passager.email as passager_email,
+                            v.marque, v.modele, v.couleur, v.plaque_immatriculation
                     FROM reservation r 
                     JOIN covoiturage c ON r.covoiturage_id = c.id 
                     JOIN utilisateur chauffeur ON c.chauffeur_id = chauffeur.id

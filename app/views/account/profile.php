@@ -208,7 +208,7 @@ require_once 'app/views/includes/head-header.php';
                                             <div class="trip-meta d-flex flex-column gap-2">
                                                 <span class="infos"><i class="fas fa-calendar-alt"></i> <?= date('d/m/Y', strtotime($covoit['date_depart'])) ?></span>
                                                 <span class="infos"><i class="fas fa-clock"></i> <?= date('H:i', strtotime($covoit['heure_depart'])) ?></span>
-                                                <span class="infos"><i class="fas fa-users"></i> <?= $covoit['nb_reservations'] ?> réservation(s)</span>
+                                                <span class="infos"><i class="fas fa-users"></i> <?= $covoit['nb_reservation'] ?> réservation(s)</span>
                                                 <span class="infos"><i class="fas fa-euro-sign"></i> <?= $covoit['prix'] ?>€</span>
                                             </div>
                                         </div>
@@ -278,13 +278,26 @@ require_once 'app/views/includes/head-header.php';
                                                 </a>
 
                                                 <?php if ($reservation['statut'] === 'confirmee' && strtotime($reservation['date_depart'] . ' ' . $reservation['heure_depart']) > time() + 2*3600): ?>
-                                                    <form method="POST" action="/reservation/annuler" style="display: inline;">
-                                                        <input type="hidden" name="reservation_id" value="<?= $reservation['id'] ?>">
-                                                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Êtes-vous sûr de vouloir annuler cette réservation ?')                             ">
-                                                            <i class="fas fa-times"></i>
-                                                            Annuler
-                                                        </button>
-                                                    </form>
+                                                <button 
+                                                    type="button"
+                                                    class="btn btn-danger btn-sm cancel-reservation-btn" 
+                                                    data-reservation-id="<?= $reservation['id'] ?>"
+                                                    data-reservation-route="<?= htmlspecialchars($reservation['ville_depart'] . ' → ' . $reservation['ville_arrivee']) ?>"
+                                                    data-reservation-date="<?= date('d/m/Y à H:i', strtotime($reservation['date_depart'] . ' ' . $reservation['heure_depart'])) ?>">
+                                                    <i class="fas fa-times"></i>
+                                                    Annuler
+                                                </button>
+                                                <?php endif; ?>
+
+                                                <?php if ($reservation['statut'] === 'annulee'): ?>
+                                                <button 
+                                                    type="button"
+                                                    class="btn btn-danger btn-sm delete-reservation-btn" 
+                                                    data-reservation-id="<?= $reservation['id'] ?>"
+                                                    data-reservation-route="<?= htmlspecialchars($reservation['ville_depart'] . ' → ' . $reservation['ville_arrivee']) ?>">
+                                                    <i class="fas fa-trash"></i>
+                                                    Supprimer
+                                                </button>
                                                 <?php endif; ?>
                                             </div>
                                         </div>
@@ -425,7 +438,71 @@ require_once 'app/views/includes/head-header.php';
     </div>
 </div>
 
+<!-- Modal d'annulation de réservation -->
+<div id="cancelReservationModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Annuler la réservation</h3>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir annuler cette réservation ?</p>
+            <div class="reservation-info-modal">
+                <i class="fas fa-route"></i>
+                <div>
+                    <strong id="reservationRoute"></strong><br>
+                    <small id="reservationDate"></small>
+                </div>
+            </div>
+            <p class="warning-text">
+                <i class="fas fa-info-circle"></i>
+                Cette action est irréversible. Le conducteur sera notifié.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeCancelModal">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+            <form id="cancelReservationForm" method="POST" action="/reservation/annuler" style="display: inline;">
+                <input type="hidden" name="reservation_id" id="reservationIdToCancel">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Annuler la réservation
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de suppression de réservation -->
+<div id="deleteReservationModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-trash"></i> Supprimer la réservation</h3>
+        </div>
+        <div class="modal-body">
+            <p>Voulez-vous supprimer définitivement cette réservation annulée ?</p>
+            <div class="reservation-info-modal">
+                <i class="fas fa-route"></i>
+                <strong id="deleteReservationRoute"></strong>
+            </div>
+            <p class="warning-text">
+                <i class="fas fa-info-circle"></i>
+                Cette action est irréversible.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeDeleteReservationModal">
+                <i class="fas fa-times"></i> Annuler
+            </button>
+            <form id="deleteReservationForm" method="POST" action="/reservation/supprimer" style="display: inline;">
+                <input type="hidden" name="reservation_id" id="reservationIdToDelete">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 <?php
-$pageSpecificJs = 'vehicle.js';
+$pageSpecificJs = ['vehicle.js', 'profile.js'];
 require_once 'app/views/includes/footer.php';
 ?>

@@ -273,6 +273,45 @@ footer a:hover {
     min-width: 120px;
 }
 
+/* Info réservation dans le modal */
+.reservation-info-modal {
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 8px;
+    margin: 15px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+}
+
+.reservation-info-modal i {
+    font-size: 1.5rem;
+    color: #6c757d;
+    margin-top: 5px;
+}
+
+.reservation-info-modal strong {
+    display: block;
+    font-size: 1.1rem;
+    color: #212529;
+    margin-bottom: 5px;
+}
+
+.status-annulee {
+    background-color: #ae7445;
+    padding: 0.5em;
+    border-radius: 5px;
+    color: white;
+}
+
+.trip-card:has(.status-annulee) {
+    opacity: 0.7;
+}
+
+.reservation-info-modal small {
+    color: #6c757d;
+}
+
 @media (max-width: 768px) {
     .vehicle-actions {
         flex-direction: column;

@@ -108,7 +108,7 @@ class UserModel {
         try {
             $sql = "SELECT c.*, v.marque, v.modele, 
                     (SELECT COUNT(*) FROM reservation r 
-                    WHERE r.covoiturage_id = c.id AND r.statut = 'confirmee') as nb_reservations
+                    WHERE r.covoiturage_id = c.id AND r.statut = 'confirmee') as nb_reservation
                     FROM covoiturage c 
                     LEFT JOIN vehicule v ON c.vehicule_id = v.id 
                     WHERE c.chauffeur_id = ? 
@@ -123,29 +123,7 @@ class UserModel {
         }
     }
     
-    /**
-     * Récupérer les réservations de l'utilisateur (si passager)
-     */
-    public function getUserReservations($userId) {
-        try {
-            $sql = "SELECT r.*, c.ville_depart, c.ville_arrivee, c.date_depart, 
-                    c.heure_depart, c.prix, u.pseudo as chauffeur_pseudo, 
-                    v.marque, v.modele, v.couleur
-                    FROM reservation r 
-                    JOIN covoiturage c ON r.covoiturage_id = c.id 
-                    JOIN utilisateur u ON c.chauffeur_id = u.id 
-                    LEFT JOIN vehicule v ON c.vehicule_id = v.id 
-                    WHERE r.passager_id = ? 
-                    ORDER BY c.date_depart DESC";
-            
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([$userId]);
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Erreur getUserReservations: " . $e->getMessage());
-            return [];
-        }
-    }
+    
     
     /**
      * Récupérer les avis reçus par l'utilisateur

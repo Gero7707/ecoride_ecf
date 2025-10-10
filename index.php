@@ -99,6 +99,13 @@ switch ($path) {
         $reservationController->confirmReservation();
         break;
 
+    case '/reservation/supprimer':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $reservationController = new ReservationController($pdo);
+            $reservationController->deleteReservation();
+        }
+        break;
+
     case '/vehicule/ajouter':
         // Ajouter un véhicule
         if (!isset($_SESSION['user_id'])) {
