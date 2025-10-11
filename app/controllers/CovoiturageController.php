@@ -180,5 +180,121 @@ class CovoiturageController {
             exit();
         }
     }
+
+    /**
+ * Annuler un covoiturage
+ */
+    public function cancelCovoiturage() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /profil');
+            exit();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+
+        $covoiturageId = isset($_POST['covoiturage_id']) ? intval($_POST['covoiturage_id']) : 0;
+
+        try {
+            // Vérifier que le covoiturage appartient au chauffeur
+            $stmt = $this->pdo->prepare("
+                SELECT id, statut, date_depart, heure_depart
+                FROM covoiturage 
+                WHERE id = ? AND chauffeur_id = ?
+            ");
+            $stmt->execute([$covoiturageId, $_SESSION['user_id']]);
+            $covoiturage = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$covoiturage) {
+                $_SESSION['error'] = 'Covoiturage introuvable';
+                header('Location: /profil');
+                exit();
+            }
+
+            if ($covoiturage['statut'] !== 'prevu') {
+                $_SESSION['error'] = 'Seuls les covoiturages actifs peuvent être annulés';
+                header('Location: /profil');
+                exit();
+            }
+
+            // Annuler le covoiturage
+            $stmt = $this->pdo->prepare("UPDATE covoiturage SET statut = 'annule' WHERE id = ?");
+            $stmt->execute([$covoiturageId]);
+
+            // Annuler toutes les réservations associées
+            $stmt = $this->pdo->prepare("UPDATE reservation SET statut = 'annule' WHERE covoiturage_id = ?");
+            $stmt->execute([$covoiturageId]);
+
+            $_SESSION['success'] = 'Covoiturage annulé avec succès. Les passagers ont été notifiés.';
+            header('Location: /profil');
+            exit();
+
+        } catch (PDOException $e) {
+            error_log('Erreur annulation covoiturage: ' . $e->getMessage());
+            $_SESSION['error'] = 'Erreur lors de l\'annulation';
+            header('Location: /profil');
+            exit();
+        }
+    }
+
+/**
+ * Supprimer un covoiturage annulé
+ */
+    public function deleteCovoiturage() {
+        if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
+            header('Location: /profil');
+            exit();
+        }
+
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+
+        $covoiturageId = isset($_POST['covoiturage_id']) ? intval($_POST['covoiturage_id']) : 0;
+
+        try {
+            // Vérifier que le covoiturage appartient au chauffeur et est annulé
+            $stmt = $this->pdo->prepare("
+                SELECT id, statut 
+                FROM covoiturage 
+                WHERE id = ? AND chauffeur_id = ?
+            ");
+            $stmt->execute([$covoiturageId, $_SESSION['user_id']]);
+            $covoiturage = $stmt->fetch(PDO::FETCH_ASSOC);
+
+            if (!$covoiturage) {
+                $_SESSION['error'] = 'Covoiturage introuvable';
+                header('Location: /profil');
+                exit();
+            }
+
+            if ($covoiturage['statut'] !== 'annule') {
+                $_SESSION['error'] = 'Seuls les covoiturages annulés peuvent être supprimés';
+                header('Location: /profil');
+                exit();
+            }
+
+            // Supprimer d'abord les réservations associées
+            $stmt = $this->pdo->prepare("DELETE FROM reservation WHERE covoiturage_id = ?");
+            $stmt->execute([$covoiturageId]);
+
+            // Supprimer le covoiturage
+            $stmt = $this->pdo->prepare("DELETE FROM covoiturage WHERE id = ?");
+            $stmt->execute([$covoiturageId]);
+
+            $_SESSION['success'] = 'Covoiturage supprimé avec succès';
+            header('Location: /profil');
+            exit();
+
+        } catch (PDOException $e) {
+            error_log('Erreur suppression covoiturage: ' . $e->getMessage());
+            $_SESSION['error'] = 'Erreur lors de la suppression';
+            header('Location: /profil');
+            exit();
+        }
+    }
 }
 ?>

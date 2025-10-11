@@ -54,7 +54,7 @@ CREATE TABLE reservation (
     id INT AUTO_INCREMENT PRIMARY KEY,
     passager_id INT NOT NULL,
     covoiturage_id INT NOT NULL,
-    statut ENUM('confirmee', 'annulee', 'terminee') DEFAULT 'confirmee',
+    statut ENUM('confirmee', 'annule', 'terminee') DEFAULT 'confirmee',
     date_reservation TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (passager_id) REFERENCES utilisateur(id) ON DELETE CASCADE,
     FOREIGN KEY (covoiturage_id) REFERENCES covoiturage(id) ON DELETE CASCADE

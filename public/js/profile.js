@@ -92,4 +92,87 @@ document.addEventListener('DOMContentLoaded', function() {
             closeDeleteReservationModal();
         }
     });
+
+    // ========== ANNULATION DE COVOITURAGE ==========
+    
+    function openCancelCovoiturageModal(covoiturageId, route, date) {
+        document.getElementById('covoiturageIdToCancel').value = covoiturageId;
+        document.getElementById('covoiturageRoute').textContent = route;
+        document.getElementById('covoiturageDate').textContent = date;
+        document.getElementById('cancelCovoiturageModal').style.display = 'flex';
+    }
+    
+    function closeCancelCovoiturageModal() {
+        document.getElementById('cancelCovoiturageModal').style.display = 'none';
+    }
+    
+    // Boutons d'annulation de covoiturage
+    const cancelCovoiturageButtons = document.querySelectorAll('.cancel-covoiturage-btn');
+    cancelCovoiturageButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const covoiturageId = this.dataset.covoiturageId;
+            const route = this.dataset.covoiturageRoute;
+            const date = this.dataset.covoiturageDate;
+            openCancelCovoiturageModal(covoiturageId, route, date);
+        });
+    });
+    
+    const closeCancelCovoiturageBtn = document.getElementById('closeCancelCovoiturageModal');
+    if (closeCancelCovoiturageBtn) {
+        closeCancelCovoiturageBtn.addEventListener('click', closeCancelCovoiturageModal);
+    }
+    
+    // ========== SUPPRESSION DE COVOITURAGE ==========
+    
+    function openDeleteCovoiturageModal(covoiturageId, route) {
+        document.getElementById('covoiturageIdToDelete').value = covoiturageId;
+        document.getElementById('deleteCovoiturageRoute').textContent = route;
+        document.getElementById('deleteCovoiturageModal').style.display = 'flex';
+    }
+    
+    function closeDeleteCovoiturageModal() {
+        document.getElementById('deleteCovoiturageModal').style.display = 'none';
+    }
+    
+    // Boutons de suppression de covoiturage
+    const deleteCovoiturageButtons = document.querySelectorAll('.delete-covoiturage-btn');
+    deleteCovoiturageButtons.forEach(button => {
+        button.addEventListener('click', function() {
+            const covoiturageId = this.dataset.covoiturageId;
+            const route = this.dataset.covoiturageRoute;
+            openDeleteCovoiturageModal(covoiturageId, route);
+        });
+    });
+    
+    const closeDeleteCovoiturageBtn = document.getElementById('closeDeleteCovoiturageModal');
+    if (closeDeleteCovoiturageBtn) {
+        closeDeleteCovoiturageBtn.addEventListener('click', closeDeleteCovoiturageModal);
+    }
+    
+    // Fermer les modals en cliquant sur l'overlay
+    const cancelCovoiturageModal = document.getElementById('cancelCovoiturageModal');
+    if (cancelCovoiturageModal) {
+        cancelCovoiturageModal.addEventListener('click', function(e) {
+            if (e.target.id === 'cancelCovoiturageModal') {
+                closeCancelCovoiturageModal();
+            }
+        });
+    }
+    
+    const deleteCovoiturageModal = document.getElementById('deleteCovoiturageModal');
+    if (deleteCovoiturageModal) {
+        deleteCovoiturageModal.addEventListener('click', function(e) {
+            if (e.target.id === 'deleteCovoiturageModal') {
+                closeDeleteCovoiturageModal();
+            }
+        });
+    }
+    
+    // Fermer avec Échap
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeCancelCovoiturageModal();
+            closeDeleteCovoiturageModal();
+        }
+    });
 });

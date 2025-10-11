@@ -68,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (prixInput) prixInput.value = pricePerPerson;
     }
 
-    const calculateButton = document.getElementById('calculatePrice');
+    const calculateButton = document.getElementById('calculateButton');
     if (calculateButton) {
         calculateButton.addEventListener('click', calculatePrice);
     }

@@ -297,20 +297,29 @@ footer a:hover {
     margin-bottom: 5px;
 }
 
-.status-annulee {
+.status-annule {
     background-color: #ae7445;
     padding: 0.5em;
     border-radius: 5px;
     color: white;
 }
 
-.trip-card:has(.status-annulee) {
+.status-prevu ,.status-confirmee{
+    background-color: #4a7c25;
+    color: white;
+    border-radius: 5px;
+    padding: 0.5em;
+}
+
+.trip-card:has(.status-annule) {
     opacity: 0.7;
 }
 
 .reservation-info-modal small {
     color: #6c757d;
 }
+
+
 
 @media (max-width: 768px) {
     .vehicle-actions {

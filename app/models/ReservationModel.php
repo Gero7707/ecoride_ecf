@@ -63,7 +63,7 @@ class ReservationModel {
     public function hasUserReserved($userId, $covoiturageId) {
         try {
             $sql = "SELECT * FROM reservation 
-                    WHERE passager_id = ? AND covoiturage_id = ? AND statut != 'annulee'";
+                    WHERE passager_id = ? AND covoiturage_id = ? AND statut != 'annule'";
 
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$userId, $covoiturageId]);
@@ -118,7 +118,7 @@ class ReservationModel {
      */
     public function cancelReservation($reservationId) {
         try {
-            $sql = "UPDATE reservation SET statut = 'annulee' WHERE id = ?";
+            $sql = "UPDATE reservation SET statut = 'annule' WHERE id = ?";
             $stmt = $this->db->prepare($sql);
             return $stmt->execute([$reservationId]);
         } catch (PDOException $e) {
@@ -272,7 +272,7 @@ class ReservationModel {
             $sql = "SELECT r.*, u.pseudo as passager_pseudo, u.telephone as passager_telephone
                     FROM reservation r 
                     JOIN utilisateur u ON r.passager_id = u.id 
-                    WHERE r.covoiturage_id = ? AND r.statut != 'annulee'
+                    WHERE r.covoiturage_id = ? AND r.statut != 'annule'
                     ORDER BY r.date_reservation ASC";
             
             $stmt = $this->db->prepare($sql);
@@ -306,7 +306,7 @@ class ReservationModel {
             $sql = "SELECT 
                         COUNT(*) as total_reservations,
                         SUM(CASE WHEN r.statut = 'confirmee' THEN 1 ELSE 0 END) as confirmees,
-                        SUM(CASE WHEN r.statut = 'annulee' THEN 1 ELSE 0 END) as annulees,
+                        SUM(CASE WHEN r.statut = 'annule' THEN 1 ELSE 0 END) as annulees,
                         SUM(CASE WHEN r.statut = 'terminee' THEN 1 ELSE 0 END) as terminees,
                         SUM(CASE WHEN r.statut = 'confirmee' THEN c.prix ELSE 0 END) as total_depense
                     FROM reservation r 

@@ -64,8 +64,9 @@ nav , footer  {
 
 .trip-header, .trip-details-content {
     background: linear-gradient(135deg, #2d5016, #4a7c25);
-    padding: 1rem;
     text-align: center;
+    padding-top: 1em;
+    padding-bottom: 1em;
 }
 
 .trip-route-main, .details-grid{

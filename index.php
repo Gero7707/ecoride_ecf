@@ -106,6 +106,20 @@ switch ($path) {
         }
         break;
 
+        case '/covoiturage/annuler':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $covoiturageController = new CovoiturageController($pdo);
+                $covoiturageController->cancelCovoiturage();
+            }
+            break;
+        
+        case '/covoiturage/supprimer':
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+                $covoiturageController = new CovoiturageController($pdo);
+                $covoiturageController->deleteCovoiturage();
+            }
+            break;
+
     case '/vehicule/ajouter':
         // Ajouter un véhicule
         if (!isset($_SESSION['user_id'])) {

@@ -251,7 +251,7 @@ class ReservationController {
         }
         
         // Ne peut pas annuler si la réservation est déjà annulée
-        if ($reservation['statut'] === 'annulee') {
+        if ($reservation['statut'] === 'annule') {
             return false;
         }
         
@@ -348,7 +348,7 @@ class ReservationController {
                 exit();
             }
 
-            if ($reservation['statut'] !== 'annulee') {
+            if ($reservation['statut'] !== 'annule') {
                 $_SESSION['error'] = 'Seules les réservations annulées peuvent être supprimées';
                 header('Location: /profil');
                 exit();

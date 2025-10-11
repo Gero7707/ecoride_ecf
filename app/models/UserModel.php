@@ -108,12 +108,20 @@ class UserModel {
         try {
             $sql = "SELECT c.*, v.marque, v.modele, 
                     (SELECT COUNT(*) FROM reservation r 
-                    WHERE r.covoiturage_id = c.id AND r.statut = 'confirmee') as nb_reservation
+                    WHERE r.covoiturage_id = c.id AND r.statut IN ('confirmee', 'en_attente')) as nb_reservations
                     FROM covoiturage c 
                     LEFT JOIN vehicule v ON c.vehicule_id = v.id 
                     WHERE c.chauffeur_id = ? 
-                    ORDER BY c.date_depart DESC";
-            
+                    ORDER BY 
+                        CASE c.statut
+                            WHEN 'prevu' THEN 1
+                            WHEN 'en_cours' THEN 2
+                            WHEN 'termine' THEN 3
+                            WHEN 'annule' THEN 4
+                            ELSE 5
+                        END,
+                        c.date_depart DESC";
+
             $stmt = $this->db->prepare($sql);
             $stmt->execute([$userId]);
             return $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -208,16 +208,47 @@ require_once 'app/views/includes/head-header.php';
                                             <div class="trip-meta d-flex flex-column gap-2">
                                                 <span class="infos"><i class="fas fa-calendar-alt"></i> <?= date('d/m/Y', strtotime($covoit['date_depart'])) ?></span>
                                                 <span class="infos"><i class="fas fa-clock"></i> <?= date('H:i', strtotime($covoit['heure_depart'])) ?></span>
-                                                <span class="infos"><i class="fas fa-users"></i> <?= $covoit['nb_reservation'] ?> réservation(s)</span>
+                                                <span class="infos"><i class="fas fa-users"></i> <?= $covoit['nb_reservations'] ?> réservation(s)</span>
                                                 <span class="infos"><i class="fas fa-euro-sign"></i> <?= $covoit['prix'] ?>€</span>
                                             </div>
                                         </div>
-                                        
+                        
                                         <div class="trip-status">
                                             <span class="status-badge status-<?= $covoit['statut'] ?>">
                                                 <?= ucfirst(str_replace('_', ' ', $covoit['statut'])) ?>
                                             </span>
                                         </div>
+                                    </div>
+                    
+                                    <!-- Actions sur le covoiturage -->
+                                    <div class="trip-actions">
+                                        <a href="/covoiturage/<?= $covoit['id'] ?>" class="btn btn-outline btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                            Détails
+                                        </a>
+
+                                        <?php if ($covoit['statut'] === 'prevu' && strtotime($covoit['date_depart'] . ' ' . $covoit['heure_depart']) > time()): ?>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-danger btn-sm cancel-covoiturage-btn" 
+                                            data-covoiturage-id="<?= $covoit['id'] ?>"
+                                            data-covoiturage-route="<?= htmlspecialchars($covoit['ville_depart'] . ' → ' . $covoit['ville_arrivee']) ?>"
+                                            data-covoiturage-date="<?= date('d/m/Y à H:i', strtotime($covoit['date_depart'] . ' ' . $covoit['heure_depart'])) ?>">
+                                            <i class="fas fa-times"></i>
+                                            Annuler
+                                        </button>
+                                        <?php endif; ?>
+
+                                        <?php if ($covoit['statut'] === 'annule'): ?>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-danger btn-sm delete-covoiturage-btn" 
+                                            data-covoiturage-id="<?= $covoit['id'] ?>"
+                                            data-covoiturage-route="<?= htmlspecialchars($covoit['ville_depart'] . ' → ' . $covoit['ville_arrivee']) ?>">
+                                            <i class="fas fa-trash"></i>
+                                            Supprimer
+                                        </button>
+                                        <?php endif; ?>
                                     </div>
                                     <hr>
                                 </div>
@@ -227,7 +258,7 @@ require_once 'app/views/includes/head-header.php';
                                     <a href="/mes-covoiturages" class="btn btn-outline">Voir tous mes covoiturages</a>
                                 </div>
                             <?php endif; ?>
-                        <?php else: ?>
+                            <?php else: ?>
                             <div class="empty-state">
                                 <i class="fas fa-map-marked-alt"></i>
                                 <p>Aucun covoiturage proposé</p>
@@ -270,41 +301,40 @@ require_once 'app/views/includes/head-header.php';
                                             <span class="status-badge status-<?= $reservation['statut'] ?>">
                                                 <?= ucfirst($reservation['statut']) ?>
                                             </span>
-                                            
-                                            <div class="trip-actions">
-                                                <a href="/covoiturage/<?= $reservation['covoiturage_id'] ?>" class="btn btn-outline btn-sm">
-                                                    <i class="fas fa-eye"></i>
-                                                    Détails
-                                                </a>
-
-                                                <?php if ($reservation['statut'] === 'confirmee' && strtotime($reservation['date_depart'] . ' ' . $reservation['heure_depart']) > time() + 2*3600): ?>
-                                                <button 
-                                                    type="button"
-                                                    class="btn btn-danger btn-sm cancel-reservation-btn" 
-                                                    data-reservation-id="<?= $reservation['id'] ?>"
-                                                    data-reservation-route="<?= htmlspecialchars($reservation['ville_depart'] . ' → ' . $reservation['ville_arrivee']) ?>"
-                                                    data-reservation-date="<?= date('d/m/Y à H:i', strtotime($reservation['date_depart'] . ' ' . $reservation['heure_depart'])) ?>">
-                                                    <i class="fas fa-times"></i>
-                                                    Annuler
-                                                </button>
-                                                <?php endif; ?>
-
-                                                <?php if ($reservation['statut'] === 'annulee'): ?>
-                                                <button 
-                                                    type="button"
-                                                    class="btn btn-danger btn-sm delete-reservation-btn" 
-                                                    data-reservation-id="<?= $reservation['id'] ?>"
-                                                    data-reservation-route="<?= htmlspecialchars($reservation['ville_depart'] . ' → ' . $reservation['ville_arrivee']) ?>">
-                                                    <i class="fas fa-trash"></i>
-                                                    Supprimer
-                                                </button>
-                                                <?php endif; ?>
-                                            </div>
                                         </div>
-                                        <hr>
                                     </div>
-
                                     
+                                    <div class="trip-actions">
+                                        <a href="/covoiturage/<?= $reservation['covoiturage_id'] ?>" class="btn btn-outline btn-sm">
+                                            <i class="fas fa-eye"></i>
+                                            Détails
+                                        </a>
+
+                                        <?php if ($reservation['statut'] === 'confirmee' && strtotime($reservation['date_depart'] . ' ' . $reservation['heure_depart']) > time() + 2*3600): ?>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-danger btn-sm cancel-reservation-btn" 
+                                            data-reservation-id="<?= $reservation['id'] ?>"
+                                            data-reservation-route="<?= htmlspecialchars($reservation['ville_depart'] . ' → ' . $reservation['ville_arrivee']) ?>"
+                                            data-reservation-date="<?= date('d/m/Y à H:i', strtotime($reservation['date_depart'] . ' ' . $reservation['heure_depart'])) ?>">
+                                            <i class="fas fa-times"></i>
+                                            Annuler
+                                        </button>
+                                        <?php endif; ?>
+
+                                        <?php if ($reservation['statut'] === 'annule'): ?>
+                                        <button 
+                                            type="button"
+                                            class="btn btn-danger btn-sm delete-reservation-btn" 
+                                            data-reservation-id="<?= $reservation['id'] ?>"
+                                            data-reservation-route="<?= htmlspecialchars($reservation['ville_depart'] . ' → ' . $reservation['ville_arrivee']) ?>">
+                                            <i class="fas fa-trash"></i>
+                                            Supprimer
+                                        </button>
+                                        <?php endif; ?>
+                                    </div>
+                                    
+                                    <hr>
                                 </div>
                             <?php endforeach; ?>
                             <?php if (count($mes_reservations) > 5): ?>
@@ -502,6 +532,73 @@ require_once 'app/views/includes/head-header.php';
         </div>
     </div>
 </div>
+
+<!-- Modal d'annulation de covoiturage -->
+<div id="cancelCovoiturageModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Annuler le covoiturage</h3>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir annuler ce covoiturage ?</p>
+            <div class="reservation-info-modal">
+                <i class="fas fa-route"></i>
+                <div>
+                    <strong id="covoiturageRoute"></strong><br>
+                    <small id="covoiturageDate"></small>
+                </div>
+            </div>
+            <p class="warning-text">
+                <i class="fas fa-info-circle"></i>
+                Cette action annulera toutes les réservations associées. Les passagers seront notifiés.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeCancelCovoiturageModal">
+                <i class="fas fa-arrow-left"></i> Retour
+            </button>
+            <form id="cancelCovoiturageForm" method="POST" action="/covoiturage/annuler" style="display: inline;">
+                <input type="hidden" name="covoiturage_id" id="covoiturageIdToCancel">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-times"></i> Annuler le covoiturage
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Modal de suppression de covoiturage -->
+<div id="deleteCovoiturageModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-trash"></i> Supprimer le covoiturage</h3>
+        </div>
+        <div class="modal-body">
+            <p>Voulez-vous supprimer définitivement ce covoiturage annulé ?</p>
+            <div class="reservation-info-modal">
+                <i class="fas fa-route"></i>
+                <strong id="deleteCovoiturageRoute"></strong>
+            </div>
+            <p class="warning-text">
+                <i class="fas fa-info-circle"></i>
+                Cette action est irréversible.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeDeleteCovoiturageModal">
+                <i class="fas fa-times"></i> Annuler
+            </button>
+            <form id="deleteCovoiturageForm" method="POST" action="/covoiturage/supprimer" style="display: inline;">
+                <input type="hidden" name="covoiturage_id" id="covoiturageIdToDelete">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+
 <?php
 $pageSpecificJs = ['vehicle.js', 'profile.js'];
 require_once 'app/views/includes/footer.php';
