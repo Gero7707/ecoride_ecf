@@ -77,10 +77,13 @@ require_once 'app/views/includes/head-header.php';
                             </label>
                             <input type="file" id="photo" name="photo" accept="image/*" class="file-input mt-3">
                             <?php if (!empty($user['photo'])): ?>
-                                <a href="/mon-compte/supprimer-photo" class="btn btn-outline btn-danger mt-3" onclick="return confirm('Êtes-vous sûr de vouloir supprimer votre photo ?')">
+                                <button 
+                                    type="button" 
+                                    class="btn btn-outline btn-danger mt-3 delete-photo-btn"
+                                    data-photo-url="/mon-compte/supprimer-photo">
                                     <i class="fas fa-trash"></i>
                                     Supprimer
-                                </a>
+                                </button>
                             <?php endif; ?>
                         </div>
                         <small class="form-help mt-3">
@@ -291,6 +294,32 @@ require_once 'app/views/includes/head-header.php';
         </div>
     </section>
 </main>
+
+<!-- Modal de suppression de photo -->
+<div id="deletePhotoModal" class="modal-overlay" style="display: none;">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h3><i class="fas fa-exclamation-triangle"></i> Supprimer la photo</h3>
+        </div>
+        <div class="modal-body">
+            <p>Êtes-vous sûr de vouloir supprimer votre photo de profil ?</p>
+            <p class="warning-text">
+                <i class="fas fa-info-circle"></i>
+                Cette action est irréversible.
+            </p>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-secondary" id="closeDeletePhotoModal">
+                <i class="fas fa-times"></i> Annuler
+            </button>
+            <form id="deletePhotoForm" method="POST" action="/mon-compte/supprimer-photo" style="display: inline;">
+                <button type="submit" class="btn btn-danger">
+                    <i class="fas fa-trash"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
 
 
 <?php

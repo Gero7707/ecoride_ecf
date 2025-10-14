@@ -14,6 +14,7 @@ require_once 'app/controllers/CovoiturageController.php';
 require_once 'app/controllers/AccountController.php';
 require_once 'app/controllers/ReservationController.php';
 require_once 'app/controllers/VehiculeController.php';
+require_once 'app/controllers/MessageController.php';
 
 // Récupération de l'URL demandée
 $request = $_SERVER['REQUEST_URI'];
@@ -106,19 +107,7 @@ switch ($path) {
         }
         break;
 
-        case '/covoiturage/annuler':
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $covoiturageController = new CovoiturageController($pdo);
-                $covoiturageController->cancelCovoiturage();
-            }
-            break;
-        
-        case '/covoiturage/supprimer':
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $covoiturageController = new CovoiturageController($pdo);
-                $covoiturageController->deleteCovoiturage();
-            }
-            break;
+    
 
     case '/vehicule/ajouter':
         // Ajouter un véhicule
@@ -178,6 +167,64 @@ switch ($path) {
         // Déconnexion
         $authController = new AuthController($pdo);
         $authController->logout();
+        break;
+
+        case '/covoiturage/annuler':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $covoiturageController = new CovoiturageController($pdo);
+            $covoiturageController->cancelCovoiturage();
+        }
+        break;
+    
+    case '/covoiturage/supprimer':
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $covoiturageController = new CovoiturageController($pdo);
+            $covoiturageController->deleteCovoiturage();
+        }
+        break;
+        
+    case '/messagerie':
+        // Page principale de messagerie - Liste des conversations
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté pour accéder à la messagerie';
+            header('Location: /connexion');
+            exit();
+        }
+        $messageController = new MessageController($pdo);
+        $messageController->index();
+        break;
+
+    case (preg_match('#^/messagerie/conversation/([a-f0-9]{24})$#', $path, $matches) ? true : false):
+        // Afficher une conversation spécifique
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté pour accéder à la messagerie';
+            header('Location: /connexion');
+            exit();
+        }
+        $messageController = new MessageController($pdo);
+        $messageController->conversation($matches[1]);
+        break;
+
+    case (preg_match('#^/messagerie/creer/(\d+)$#', $path, $matches) ? true : false):
+        // Créer une conversation pour un trajet
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté pour créer une conversation';
+            header('Location: /connexion');
+            exit();
+        }
+        $messageController = new MessageController($pdo);
+        $messageController->creerConversation($matches[1]);
+        break;
+
+    case '/messagerie/unread-count':
+        // API - Compteur de messages non lus (pour notifications)
+        if (!isset($_SESSION['user_id'])) {
+            header('Content-Type: application/json');
+            echo json_encode(['success' => false, 'error' => 'Non connecté']);
+            exit();
+        }
+        $messageController = new MessageController($pdo);
+        $messageController->getUnreadCount();
         break;
         
     default:

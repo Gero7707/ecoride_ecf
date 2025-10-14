@@ -32,9 +32,27 @@
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <div class="logo d-flex align-items-center justify-content-between">
-                <img src="/public/images/logo.png" alt="Logo EcoRide">
-                <h1>EcoRide</h1>
+            <div class="d-flex align-items-center justify-content-between w-80">
+                <!-- Logo + Titre -->
+                <div class="logo d-flex align-items-center">
+                    <img src="/public/images/logo.png" alt="Logo EcoRide">
+                    <h1>EcoRide</h1>
+                </div>
+                
+                <!-- Icône Messagerie (visible si connecté) -->
+                <?php if (isset($_SESSION['user_id'])): ?>
+                    <div class="message-icon-wrapper">
+                        <a href="/messagerie" 
+                            class="message-icon-link" 
+                            title="Messagerie"
+                            aria-label="Accéder à la messagerie">
+                            <i class="fa-regular fa-comment-dots"></i>
+                            <span id="notification-badge" 
+                                    class="badge bg-danger rounded-pill" 
+                                    style="display: none;">0</span>
+                        </a>
+                    </div>
+                <?php endif; ?>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

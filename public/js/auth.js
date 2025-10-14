@@ -46,4 +46,43 @@ document.addEventListener('DOMContentLoaded', function() {
             if (confirmPasswordField) confirmPasswordField.type = type;
         });
     }
+
+    // ========== SUPPRESSION DE PHOTO DE PROFIL ==========
+    
+    function openDeletePhotoModal() {
+        document.getElementById('deletePhotoModal').style.display = 'flex';
+    }
+    
+    function closeDeletePhotoModal() {
+        document.getElementById('deletePhotoModal').style.display = 'none';
+    }
+    
+    // Bouton de suppression de photo
+    const deletePhotoBtn = document.querySelector('.delete-photo-btn');
+    if (deletePhotoBtn) {
+        deletePhotoBtn.addEventListener('click', openDeletePhotoModal);
+    }
+    
+    // Bouton fermer modal
+    const closePhotoBtn = document.getElementById('closeDeletePhotoModal');
+    if (closePhotoBtn) {
+        closePhotoBtn.addEventListener('click', closeDeletePhotoModal);
+    }
+    
+    // Fermer en cliquant sur l'overlay
+    const deletePhotoModal = document.getElementById('deletePhotoModal');
+    if (deletePhotoModal) {
+        deletePhotoModal.addEventListener('click', function(e) {
+            if (e.target.id === 'deletePhotoModal') {
+                closeDeletePhotoModal();
+            }
+        });
+    }
+    
+    // Fermer avec Échap
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeDeletePhotoModal();
+        }
+    });
 });

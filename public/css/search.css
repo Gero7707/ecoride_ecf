@@ -79,6 +79,57 @@ nav , footer  {
     font-weight: bold;
 }
 
+#notification-badge {
+    font-size: 0.65rem;
+    padding: 0.2em 0.5em;
+}
+
+/* Icône messagerie à côté du logo */
+.message-icon-wrapper {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.message-icon-wrapper a i{
+    font-size: 1.5em;
+    color:white
+}
+.message-icon-link {
+    color: #198754;
+    font-size: 1.5rem;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s;
+}
+
+.message-icon-link:hover {
+    color: #146c43;
+}
+
+#notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    font-size: 0.6rem;
+    min-width: 18px;
+    height: 18px;
+    padding: 0.2em 0.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animation du badge pour nouveaux messages */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+#notification-badge.new-message {
+    animation: pulse 0.8s ease-in-out 3;
+}
+
 /* Styles pour la page de recherche */
 .search-page {
     min-height: 80vh;

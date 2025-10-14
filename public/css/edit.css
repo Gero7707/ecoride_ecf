@@ -67,6 +67,57 @@ nav , footer  {
     font-weight: bold;
 }
 
+#notification-badge {
+    font-size: 0.65rem;
+    padding: 0.2em 0.5em;
+}
+
+/* Icône messagerie à côté du logo */
+.message-icon-wrapper {
+    position: relative;
+    margin-left: 1rem;
+}
+
+.message-icon-wrapper a i{
+    font-size: 1.5em;
+    color:white
+}
+.message-icon-link {
+    color: #198754;
+    font-size: 1.5rem;
+    text-decoration: none;
+    position: relative;
+    display: inline-block;
+    transition: color 0.3s;
+}
+
+.message-icon-link:hover {
+    color: #146c43;
+}
+
+#notification-badge {
+    position: absolute;
+    top: -8px;
+    right: -10px;
+    font-size: 0.6rem;
+    min-width: 18px;
+    height: 18px;
+    padding: 0.2em 0.4em;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* Animation du badge pour nouveaux messages */
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.7; transform: scale(1.1); }
+}
+
+#notification-badge.new-message {
+    animation: pulse 0.8s ease-in-out 3;
+}
+
 /* Footer */
 footer {
     background: #2d5016;
@@ -141,6 +192,117 @@ h3 i , .fa-smoking,.fa-paw{
     object-fit: cover;
     margin-right: 1em;
     border: 4px solid #4ebaf0;
+}
+
+/* Modal overlay */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 9999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    animation: fadeIn 0.3s ease;
+}
+
+/* Modal content */
+.modal-content {
+    background: white;
+    border-radius: 15px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+    animation: slideUp 0.3s ease;
+    max-height: 90vh;
+    overflow-y: auto;
+}
+
+.modal-body p {
+    color: #666;
+}
+
+.modal-header {
+    padding: 20px 25px;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.modal-header h3 {
+    margin: 0;
+    color: #dc3545;
+    font-size: 1.3rem;
+}
+
+.modal-header i {
+    margin-right: 10px;
+}
+
+.modal-body {
+    padding: 25px;
+}
+
+.modal-body > p {
+    margin-bottom: 15px;
+    font-size: 1.05rem;
+}
+
+.warning-text {
+    color: #856404;
+    background: #fff3cd;
+    padding: 12px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border-left: 3px solid #ffc107;
+}
+
+.warning-text i {
+    font-size: 1.2rem;
+}
+
+.modal-footer {
+    padding: 15px 25px;
+    border-top: 1px solid #e0e0e0;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+}
+
+.modal-footer .btn {
+    min-width: 120px;
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes slideUp {
+    from {
+        transform: translateY(50px);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .modal-content {
+        margin: 20px;
+        width: calc(100% - 40px);
+    }
 }
 
 /* Responsive */
