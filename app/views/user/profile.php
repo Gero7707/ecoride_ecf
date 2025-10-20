@@ -75,6 +75,29 @@ require_once 'app/views/includes/head-header.php';
                                 Membre depuis <?= $data['user']['anciennete'] ?>
                             </p>
                         </div>
+
+                        <!-- Préférences du chauffeur -->
+                        <?php if (!empty($preferences)): ?>
+                            <div class="section-content mt-3 pt-3 border-top">
+                                <h3><i class="fas fa-sliders-h"></i> Préférences du chauffeur</h3>
+                                <div class="preferences-display mt-4">
+                                    <div class="preference-item">
+                                        <i class="fas fa-smoking<?= $preferences['accepte_fumeur'] ? '' : '-ban' ?>"></i>
+                                        <span><?= $preferences['accepte_fumeur'] ? 'Accepte les fumeurs' : 'Interdit de fumer' ?></span>
+                                    </div>
+                                    <div class="preference-item">
+                                        <i class="fas fa-paw"></i>
+                                        <span><?= $preferences['accepte_animaux'] ? 'Accepte les animaux' : 'Pas d\'animaux' ?></span>
+                                    </div>
+                                    <?php if (!empty($preferences['preferences_custom'])): ?>
+                                        <div class="preference-custom">
+                                            <i class="fas fa-info-circle"></i>
+                                            <span><?= htmlspecialchars($preferences['preferences_custom']) ?></span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                            </div>
+                        <?php endif; ?>
                         
                         <!-- Actions -->
                         <?php if (!$data['isOwnProfile']): ?>

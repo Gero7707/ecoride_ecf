@@ -132,7 +132,7 @@ nav , footer  {
     color: #de4343;
 }
 
-.fa-user,.fa-id-card,.fa-cog{
+.fa-user,.fa-id-card,.fa-cog,.fa-sliders-h{
     font-size: 1.5rem;
     color: #a02eba;
 }
@@ -189,8 +189,8 @@ nav , footer  {
 
 .messagerie-btn{
     margin-left: 1em;
-    width: 15%;
-    height: 15%;
+    width: 2.875em;
+    height: 2.438em;
 }
 
 .trip-actions {
@@ -227,6 +227,10 @@ nav , footer  {
 .show-more a{
     background: #4a7c25;
     color: white;
+}
+
+.section-content h3 i{
+    margin-right: 0.5em;
 }
 /* Footer */
 footer {

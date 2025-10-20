@@ -413,7 +413,7 @@ require_once 'app/views/includes/head-header.php';
                 <?php if ($user['statut'] === 'chauffeur' && !empty($preferences)): ?>
                 <div class="content-section">
                     <div class="section-header">
-                        <h3><i class="fas fa-cog"></i> Mes préférences</h3>
+                        <h3><i class="fas fa-sliders-h"></i> Mes préférences</h3>
                     </div>
                     <hr>
                     <div class="section-content">

@@ -79,6 +79,23 @@ class CovoiturageController {
         
         // Récupérer les avis du chauffeur
         $avis_chauffeur = $this->covoiturageModel->getDriverReviews($covoiturage['chauffeur_id']);
+
+        // Récupérer les préférences du chauffeur
+        $stmt = $this->pdo->prepare("
+            SELECT * FROM preferences_chauffeur 
+            WHERE chauffeur_id = ?
+        ");
+        $stmt->execute([$covoiturage['chauffeur_id']]);
+        $preferences = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        // Si le chauffeur n'a pas de préférences, créer un tableau par défaut
+        if (!$preferences) {
+            $preferences = [
+                'accepte_fumeur' => 0,
+                'accepte_animaux' => 0,
+                'preferences_custom' => ''
+            ];
+        }
         
         // Vérifier si l'utilisateur connecté a déjà réservé ce trajet
         $userReservation = null;

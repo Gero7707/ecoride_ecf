@@ -87,6 +87,27 @@ class UserController {
             $user['nb_reservations'] = $stats['nb_reservations'];
         }
         
+        // ✨ NOUVEAU : Récupérer les préférences si c'est un chauffeur
+        $preferences = null;
+        if ($user['statut'] === 'chauffeur' || $user['statut'] === 'admin') {
+            $stmt = $this->pdo->prepare("
+                SELECT * FROM preferences_chauffeur 
+                WHERE chauffeur_id = ?
+            ");
+            $stmt->execute([$userId]);
+            $preferences = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Valeurs par défaut si pas de préférences
+            if (!$preferences) {
+                $preferences = [
+                    'accepte_fumeur' => 0,
+                    'accepte_animaux' => 0,
+                    'preferences_custom' => ''
+                ];
+            }
+        }
+        // ✨ FIN NOUVEAU
+        
         // Calculer l'ancienneté
         $dateCreation = new DateTime($user['date_creation']);
         $now = new DateTime();
@@ -113,6 +134,7 @@ class UserController {
         $data = [
             'user' => $user,
             'avis' => $avis,
+            'preferences' => $preferences,
             'conversationExists' => $conversationExists,
             'isOwnProfile' => ($_SESSION['user_id'] === (int)$userId)
         ];

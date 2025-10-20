@@ -161,12 +161,12 @@ nav , footer  {
     font-weight: bold;
 }
 
-.departure-dot {
+.departure-dot , .fa-paw{
     font-size: 1.5rem;
     color: #54c707;
 }
 
-.arrival-dot,.fa-calendar-alt, .fa-gas-pump, .fa-info-circle, .fa-palette, .fa-flag{
+.arrival-dot,.fa-calendar-alt, .fa-gas-pump, .fa-info-circle, .fa-palette, .fa-flag, .fa-smoking-ban{
     font-size: 1.5rem;
     color: #de4343;
 }
@@ -180,7 +180,9 @@ nav , footer  {
     color: #333;
 }
 
-.fa-user{
+
+
+.fa-user, .fa-sliders-h{
     color: #a02eba;
 }
 
@@ -235,6 +237,9 @@ nav , footer  {
     color: #ddd;
 }
 
+.section-content h3 i{
+    margin-right: 0.5em;
+}
 /* Footer */
 footer {
     background: #2d5016;
