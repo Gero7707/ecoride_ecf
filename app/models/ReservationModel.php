@@ -16,25 +16,25 @@ class ReservationModel {
     /**
      * Créer une nouvelle réservation
      */
-    public function createReservation($passagerId, $covoiturageId) {
+    public function createReservation($userId, $covoiturageId, $statut = 'confirmee') {
         try {
-            $sql = "INSERT INTO reservation (passager_id, covoiturage_id, statut, date_reservation) 
-                    VALUES (?, ?, 'confirmee', NOW())";
-            
-            $stmt = $this->db->prepare($sql);
-            $result = $stmt->execute([$passagerId, $covoiturageId]);
-            
-            if ($result) {
-                return [
-                    'success' => true,
-                    'reservation_id' => $this->db->lastInsertId()
-                ];
-            } else {
-                return ['success' => false, 'error' => 'Erreur lors de la création de la réservation'];
-            }
-        } catch (PDOException $e) {
-            error_log("Erreur createReservation: " . $e->getMessage());
-            return ['success' => false, 'error' => 'Erreur technique lors de la réservation'];
+            $stmt = $this->db->prepare("
+                INSERT INTO reservation (passager_id, covoiturage_id, statut) 
+                VALUES (?, ?, ?)
+            ");
+
+            $stmt->execute([$userId, $covoiturageId, $statut]);
+
+            return [
+                'success' => true,
+                'reservation_id' => $this->db->lastInsertId()
+            ];
+
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'error' => 'Erreur lors de la création de la réservation'
+            ];
         }
     }
     
@@ -42,19 +42,14 @@ class ReservationModel {
      * Récupérer un covoiturage par son ID
      */
     public function getCovoiturageById($id) {
-        try {
-            $sql = "SELECT c.*, u.pseudo as chauffeur_pseudo, u.email as chauffeur_email
-                    FROM covoiturage c 
-                    JOIN utilisateur u ON c.chauffeur_id = u.id 
-                    WHERE c.id = ?";
-            
-            $stmt = $this->db->prepare($sql);
-            $stmt->execute([$id]);
-            return $stmt->fetch(PDO::FETCH_ASSOC);
-        } catch (PDOException $e) {
-            error_log("Erreur getCovoiturageById: " . $e->getMessage());
-            return false;
-        }
+        $stmt = $this->db->prepare("
+            SELECT c.*, u.pseudo as chauffeur_pseudo
+            FROM covoiturage c
+            JOIN utilisateur u ON c.chauffeur_id = u.id
+            WHERE c.id = ?
+        ");
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
     
     /**
@@ -358,5 +353,12 @@ class ReservationModel {
             error_log("Erreur canModifyReservation: " . $e->getMessage());
             return false;
         }
+    }
+
+    public function updateReservationStatus($reservationId, $statut) {
+        $stmt = $this->db->prepare("
+            UPDATE reservation SET statut = ? WHERE id = ?
+        ");
+        return $stmt->execute([$statut, $reservationId]);
     }
 }

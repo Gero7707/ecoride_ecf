@@ -51,7 +51,7 @@ nav , footer  {
     width: 65%;
 }
 
-.logo img{
+.logo a img{
     height: 4.5em;
     margin-right: 0.625em;
 }
@@ -60,6 +60,28 @@ nav , footer  {
     color: white;
     font-size: 1.8rem;
     font-weight: bold;
+}
+
+.gif {
+    border-radius: 50%;
+    width: 17%;
+} 
+
+.gif2 {
+    border-radius: 50%;
+    width: 23%;
+}
+
+
+.eco-badge {
+    background: #d4edda;
+    color: #155724;
+    padding: 0.25rem 0.5rem;
+    border-radius: 15px;
+    font-size: 0.875rem;
+    display: flex;
+    align-items: center;
+    gap: 1em;
 }
 
 #notification-badge {
@@ -174,12 +196,16 @@ nav , footer  {
 }
 
 .price-amount, .availability, .car, .vehicle-specs, .status-info,  .driver-card h3{
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     margin-bottom: 0.5rem;
     margin-left: 1em;
     gap: 1em;
 }
 
+.price-availability-card form button{
+    background: #dc3545;
+    color: #ddd;
+}
 
 .alert-success{
     margin: 0;
@@ -194,6 +220,20 @@ nav , footer  {
     color: rgb(215, 215, 42);
 }
 
+.driver-avatar{
+    width: 15%;
+}
+
+.driver-avatar img{
+    border-radius: 50%;
+    width: 85%;
+}
+
+.driver-profile a{
+    height: 2em;
+    background: #4a7c25;
+    color: #ddd;
+}
 
 /* Footer */
 footer {

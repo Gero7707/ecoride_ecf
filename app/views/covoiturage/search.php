@@ -60,6 +60,12 @@ require_once 'app/views/includes/head-header.php';
                                 value="<?= isset($_GET['prix_max']) ? htmlspecialchars($_GET['prix_max']) : '' ?>"
                                 min="0" step="5" placeholder="€">
                     </div>
+                    <!-- <div class="filter-group">
+                        <label for="duree_max">Durée Maximum (en mn)</label>
+                        <input type="number" id="duree_max" name="duree_max" 
+                                value="<?= isset($_GET['duree_max']) ? htmlspecialchars($_GET['duree_max']) : '' ?>"
+                                min="0" step="5" placeholder="minutes">
+                    </div> -->
                     
                     <div class="filter-group">
                         <label for="note_min">Note minimale du chauffeur</label>
@@ -98,7 +104,11 @@ require_once 'app/views/includes/head-header.php';
                                         <hr>
                                         
                                         <?php if ($trajet['energie'] === 'electrique'): ?>
-                                            <div class="eco-badge"><img src="https://www.gifsgratuits.fr/planete/planete%20(2).gif" alt="Emoji écologique" class="gif"> Trajet écologique</div>
+                                            <div class="eco-badge"><img src="https://www.gifsgratuits.fr/ecologie/a%20(40).gif" alt="Emoji écologique" class="gif"> Trajet écologique</div>
+                                            <?php elseif($trajet['energie'] === 'hybride'): ?>
+                                                <div class="eco-badge"><img src="https://www.gifsgratuits.fr/planete/planete%20(2).gif" alt="Emoji écologique" class="gif"> Trajet hybride</div>
+                                            <?php else: ?>
+                                                <div class="eco-badge"><img src="https://www.gifsgratuits.fr/ecologie/a%20(15).gif" alt="Emoji écologique" class="gif"> Trajet non écologique</div>
                                         <?php endif; ?>
                                     </div>
                                     <hr>

@@ -58,7 +58,7 @@ nav , footer  {
     width: 65%;
 }
 
-.logo img{
+.logo a img{
     height: 4.5em;
     margin-right: 0.625em;
 }
@@ -109,6 +109,8 @@ nav , footer  {
     align-items: center;
     justify-content: center;
 }
+
+
 
 /* Animation du badge pour nouveaux messages */
 @keyframes pulse {
@@ -185,6 +187,12 @@ nav , footer  {
     margin-right: 1em;
 }
 
+.messagerie-btn{
+    margin-left: 1em;
+    width: 15%;
+    height: 15%;
+}
+
 .trip-actions {
     display: flex;
     gap: 0.5rem;
@@ -209,6 +217,15 @@ nav , footer  {
 .btn-danger:hover {
     background: #c82333;
     border-color: #c82333;
+    color: white;
+}
+
+.show-more, .vehicle-actions{
+    text-align: center;
+}
+
+.show-more a{
+    background: #4a7c25;
     color: white;
 }
 /* Footer */
@@ -237,7 +254,7 @@ footer a:hover {
 }
 
 .vehicle-actions .btn {
-    flex: 1;
+    width: 50%;
 }
 
 /* Modal */

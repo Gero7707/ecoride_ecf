@@ -51,7 +51,7 @@ nav , footer  {
     width: 65%;
 }
 
-.logo img{
+.logo a img {
     height: 4.5em;
     margin-right: 0.625em;
 }

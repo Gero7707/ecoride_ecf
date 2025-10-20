@@ -175,7 +175,7 @@ class MessageController {
     
     /**
      * Créer une nouvelle conversation
-     * Appelé quand un passager réserve un trajet
+     * Peut être appelé par le chauffeur OU le passager
      * 
      * @param int $covoiturageId - ID du trajet
      */
@@ -183,6 +183,8 @@ class MessageController {
         $this->verifierConnexion();
         
         $userId = $_SESSION['user_id'];
+
+        
         
         // Récupérer les infos du trajet
         $stmt = $this->pdo->prepare("
@@ -193,34 +195,80 @@ class MessageController {
         $stmt->execute([$covoiturageId]);
         $trajet = $stmt->fetch(PDO::FETCH_ASSOC);
         
+        // 🔍 DEBUG
+        error_log("Trajet trouvé: " . ($trajet ? 'OUI' : 'NON'));
         if (!$trajet) {
             $_SESSION['error'] = 'Trajet introuvable';
             header('Location: /');
             exit();
         }
         
-        // Vérifier que l'utilisateur a bien réservé ce trajet
-        $stmt = $this->pdo->prepare("
-            SELECT id 
-            FROM reservation 
-            WHERE covoiturage_id = ? AND passager_id = ? AND statut = 'confirmee'
-        ");
-        $stmt->execute([$covoiturageId, $userId]);
-        $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+        // Déterminer si l'utilisateur est le chauffeur ou un passager
+        $isChauffeur = ($trajet['chauffeur_id'] === $userId);
         
-        if (!$reservation) {
-            $_SESSION['error'] = 'Vous devez avoir une réservation confirmée pour créer une conversation';
-            header('Location: /');
-            exit();
+        if ($isChauffeur) {
+            // CAS 1 : L'utilisateur est le CHAUFFEUR
+            // Il veut contacter un de ses passagers
+            
+            // Récupérer l'ID du passager depuis l'URL (?passager=37)
+            $passagerId = $_GET['passager'] ?? null;
+            
+            if (!$passagerId) {
+                $_SESSION['error'] = 'Passager non spécifié';
+                header('Location: /covoiturage/' . $covoiturageId);
+                exit();
+            }
+            
+            // Vérifier que ce passager a bien réservé ce trajet
+            $stmt = $this->pdo->prepare("
+                SELECT id 
+                FROM reservation 
+                WHERE covoiturage_id = ? AND passager_id = ? AND statut IN ('en_attente', 'confirmee')
+            ");
+            $stmt->execute([$covoiturageId, $passagerId]);
+            $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$reservation) {
+                $_SESSION['error'] = 'Ce passager n\'a pas réservé ce trajet';
+                header('Location: /covoiturage/' . $covoiturageId . '/passagers');
+                exit();
+            }
+            
+            // Créer ou récupérer la conversation
+            $conversation = $this->messageModel->creerOuRecupererConversation(
+                $covoiturageId,
+                $userId,           // chauffeur_id
+                $passagerId,       // passager_id
+                $trajet['date_depart']
+            );
+            
+        } else {
+            // CAS 2 : L'utilisateur est un PASSAGER
+            // Il veut contacter le chauffeur
+            
+            // Vérifier que le passager a bien réservé ce trajet
+            $stmt = $this->pdo->prepare("
+                SELECT id 
+                FROM reservation 
+                WHERE covoiturage_id = ? AND passager_id = ? AND statut = 'confirmee'
+            ");
+            $stmt->execute([$covoiturageId, $userId]);
+            $reservation = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            if (!$reservation) {
+                $_SESSION['error'] = 'Vous devez avoir une réservation confirmée pour créer une conversation';
+                header('Location: /covoiturage/' . $covoiturageId);
+                exit();
+            }
+            
+            // Créer ou récupérer la conversation
+            $conversation = $this->messageModel->creerOuRecupererConversation(
+                $covoiturageId,
+                $trajet['chauffeur_id'],  // chauffeur_id
+                $userId,                   // passager_id
+                $trajet['date_depart']
+            );
         }
-        
-        // Créer ou récupérer la conversation
-        $conversation = $this->messageModel->creerOuRecupererConversation(
-            $covoiturageId,
-            $trajet['chauffeur_id'],
-            $userId,
-            $trajet['date_depart']
-        );
         
         // Rediriger vers la conversation
         header('Location: /messagerie/conversation/' . $conversation['id']);

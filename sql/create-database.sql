@@ -103,6 +103,22 @@ CREATE TABLE security_attempts (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+-- Table pour logger les emails envoyés
+CREATE TABLE `email_logs` (
+    `id` int(11) NOT NULL AUTO_INCREMENT,
+    `destinataire` varchar(255) NOT NULL,
+    `sujet` varchar(255) NOT NULL,
+    `type_notification` enum('reservation','confirmation','annulation','message','rappel') NOT NULL,
+    `statut` enum('envoye','echec') DEFAULT 'envoye',
+    `message_erreur` text DEFAULT NULL,
+    `date_envoi` timestamp NOT NULL DEFAULT current_timestamp(),
+    PRIMARY KEY (`id`),
+    KEY `idx_destinataire` (`destinataire`),
+    KEY `idx_type` (`type_notification`),
+    KEY `idx_date` (`date_envoi`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
 -- Insertion des paramètres de base
 INSERT INTO parametre (cle_param, valeur, description) VALUES
 ('credits_commission', '2', 'Nombre de crédits pris par la plateforme par trajet'),

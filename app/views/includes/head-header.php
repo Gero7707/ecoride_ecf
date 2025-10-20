@@ -35,7 +35,7 @@
             <div class="d-flex align-items-center justify-content-between w-80">
                 <!-- Logo + Titre -->
                 <div class="logo d-flex align-items-center">
-                    <img src="/public/images/logo.png" alt="Logo EcoRide">
+                    <a href="/"><img src="/public/images/logo.png" alt="Logo EcoRide"></a>
                     <h1>EcoRide</h1>
                 </div>
                 
@@ -81,7 +81,7 @@
                         </li>
                     <?php endif; ?>
                     <li class="nav-item">
-                        <a class="nav-link" href="/contact">Contact</a>
+                        <a class="nav-link" href="/contact">A propos /Contact</a>
                     </li>
                 </ul>
             </div>

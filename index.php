@@ -27,6 +27,14 @@ switch ($path) {
         // Page d'accueil
         include 'app/views/home/index.php';
         break;
+    case '/contact':
+        // Page d'accueil
+        include 'app/views/contact/contact.php';
+        break;
+    case '/mentions-legales':
+        // Page des mentions légales
+        include 'app/views/contact/mentions-legales.php';
+        break;
         
     case '/covoiturages':
         // Page de recherche de covoiturages
@@ -107,6 +115,17 @@ switch ($path) {
         }
         break;
 
+    case (preg_match('#^/utilisateur/(\d+)$#', $path, $matches) ? true : false):
+        // Profil public d'un utilisateur
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté';
+            header('Location: /connexion');
+            exit();
+        }
+        require_once 'app/controllers/UserController.php';
+        $userController = new UserController($pdo);
+        $userController->showPublicProfile($matches[1]);
+        break;
     
 
     case '/vehicule/ajouter':
@@ -182,6 +201,40 @@ switch ($path) {
             $covoiturageController->deleteCovoiturage();
         }
         break;
+
+    case (preg_match('#^/covoiturage/(\d+)/passagers$#', $path, $matches) ? true : false):
+        // Liste des passagers d'un covoiturage (pour le chauffeur)
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté';
+            header('Location: /connexion');
+            exit();
+        }
+        $covoiturageController = new CovoiturageController($pdo);
+        $covoiturageController->showPassengers($matches[1]);
+        break;
+
+    case '/reservation/refuser':
+        $reservationController = new ReservationController($pdo);
+        $reservationController->refuserReservation();
+        break;
+
+    case '/mes-covoiturages':
+        // Liste de tous mes covoiturages (pour le chauffeur)
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté';
+            header('Location: /connexion');
+            exit();
+        }
+
+        if ($_SESSION['user_statut'] !== 'chauffeur' && $_SESSION['user_statut'] !== 'admin') {
+            $_SESSION['error'] = 'Vous devez être chauffeur';
+            header('Location: /profil');
+            exit();
+        }
+    
+        $covoiturageController = new CovoiturageController($pdo);
+        $covoiturageController->mesCovoiturages();
+        break;
         
     case '/messagerie':
         // Page principale de messagerie - Liste des conversations
@@ -206,6 +259,7 @@ switch ($path) {
         break;
 
     case (preg_match('#^/messagerie/creer/(\d+)$#', $path, $matches) ? true : false):
+        
         // Créer une conversation pour un trajet
         if (!isset($_SESSION['user_id'])) {
             $_SESSION['error'] = 'Vous devez être connecté pour créer une conversation';

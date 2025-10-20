@@ -86,17 +86,34 @@ class Covoiturage {
     }
     
     /**
-     * Récupérer un covoiturage par son ID
+     * Récupérer un covoiturage par son ID avec toutes les informations
+     * ✨ VERSION CORRIGÉE avec nb_trajets_chauffeur
      */
     public function getById($id) {
-        $sql = "SELECT c.*, u.pseudo, u.telephone, v.marque, v.modele, v.energie, v.couleur,
-                        AVG(a.note) as note_moyenne, COUNT(a.id) as nb_avis
+        $sql = "SELECT 
+                    c.*,
+                    u.pseudo,
+                    u.telephone,
+                    u.photo as photo_chauffeur,
+                    v.marque,
+                    v.modele,
+                    v.energie,
+                    v.couleur,
+                    v.nombre_places,
+                    -- ✨ Calculer le nombre de trajets du chauffeur
+                    (SELECT COUNT(*) 
+                     FROM covoiturage 
+                     WHERE chauffeur_id = c.chauffeur_id 
+                     AND statut != 'annule') as nb_trajets_chauffeur,
+                    -- Calculer la note moyenne du chauffeur
+                    COALESCE(AVG(a.note), 0) as note_moyenne,
+                    COUNT(DISTINCT a.id) as nb_avis
                 FROM covoiturage c
                 JOIN utilisateur u ON c.chauffeur_id = u.id
                 JOIN vehicule v ON c.vehicule_id = v.id
                 LEFT JOIN avis a ON a.evalue_id = c.chauffeur_id AND a.valide = 1
                 WHERE c.id = :id
-                GROUP BY c.id";
+                GROUP BY c.id, u.id, v.id";
         
         $stmt = $this->pdo->prepare($sql);
         $stmt->execute([':id' => $id]);
@@ -125,11 +142,11 @@ class Covoiturage {
     /**
      * Créer un nouveau covoiturage
      */
-    public function create($chauffeur_id, $vehicule_id, $ville_depart, $ville_arrivee, $date_depart, $heure_depart, $heure_arrivee, $prix, $places_disponibles) {
-        
-        $sql = "INSERT INTO covoiturage (chauffeur_id, vehicule_id, ville_depart, ville_arrivee, date_depart, heure_depart, heure_arrivee, prix, places_disponibles, statut)
-                VALUES (:chauffeur_id, :vehicule_id, :ville_depart, :ville_arrivee,:date_depart, :heure_depart, :heure_arrivee, :prix, :places_disponibles, 'prevu')";
-        
+    public function create($chauffeur_id, $vehicule_id, $ville_depart, $ville_arrivee, $date_depart, $heure_depart, $heure_arrivee, $prix, $places_disponibles, $confirmation_requise = 0) {
+    
+        $sql = "INSERT INTO covoiturage (chauffeur_id, vehicule_id, ville_depart, ville_arrivee, date_depart, heure_depart, heure_arrivee, prix, places_disponibles, confirmation_requise, statut)
+            VALUES (:chauffeur_id, :vehicule_id, :ville_depart, :ville_arrivee, :date_depart, :heure_depart, :heure_arrivee, :prix, :places_disponibles, :confirmation_requise, 'prevu')";
+    
         $stmt = $this->pdo->prepare($sql);
         $result = $stmt->execute([
             ':chauffeur_id' => $chauffeur_id,
@@ -140,14 +157,29 @@ class Covoiturage {
             ':heure_depart' => $heure_depart,
             ':heure_arrivee' => $heure_arrivee,
             ':prix' => $prix,
-            ':places_disponibles' => $places_disponibles
+            ':places_disponibles' => $places_disponibles,
+            ':confirmation_requise' => $confirmation_requise
         ]);
-        
+    
         if ($result) {
             return ['success' => true, 'covoiturage_id' => $this->pdo->lastInsertId()];
         } else {
             return ['success' => false, 'error' => 'Erreur lors de la création du covoiturage'];
         }
+    }
+    
+    /**
+     * Vérifier si un utilisateur a déjà réservé un covoiturage
+     */
+    public function getUserReservation($covoiturageId, $userId) {
+        $stmt = $this->pdo->prepare("
+            SELECT * FROM reservation 
+            WHERE covoiturage_id = ? AND passager_id = ?
+            ORDER BY date_reservation DESC
+            LIMIT 1
+        ");
+        $stmt->execute([$covoiturageId, $userId]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
 ?>

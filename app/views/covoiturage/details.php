@@ -52,6 +52,15 @@ require_once 'app/views/includes/head-header.php';
                         <hr>
                     </div>
                 </div>
+
+                <?php if ($covoiturage['energie'] === 'electrique'): ?>
+                    <div class="eco-badge"><img src="https://www.gifsgratuits.fr/ecologie/a%20(40).gif" alt="Emoji écologique" class="gif"> Trajet écologique</div>
+                    <?php elseif($covoiturage['energie'] === 'hybride'): ?>
+                        <div class="eco-badge"><img src="https://www.gifsgratuits.fr/planete/planete%20(2).gif" alt="Emoji écologique" class="gif"> Trajet hybride</div>
+                    <?php else: ?>
+                        <div class="eco-badge"><img src="https://www.gifsgratuits.fr/ecologie/a%20(15).gif" alt="Emoji écologique" class="gif2"> Trajet non écologique</div>
+                <?php endif; ?>
+                <hr>
                 
                 <div class="trip-datetime">
                     <div class="trip-date d-flex ">
@@ -80,48 +89,122 @@ require_once 'app/views/includes/head-header.php';
                 <div class="main-info">
                     
                     <!-- Prix et disponibilité -->
-                    <div class="price-availability-card">
-                        <div class="price-section">
-                            <div class="price-amount d-flex">
-                                <h3>€</h3>
-                                <span class="price-value"><?= number_format($covoiturage['prix'], 2, ',', ' ') ?>€</span>
-                                <span class="price-label">par personne</span>
+                        <div class="price-availability-card">
+                            <div class="price-section">
+                                <div class="price-amount d-flex">
+                                    <h3>€</h3>
+                                    <span class="price-value"><?= number_format($covoiturage['prix'], 2, ',', ' ') ?>€</span>
+                                    <span class="price-label">par personne</span>
+                                </div>
+                                <hr>
+                                <div class="availability d-flex">
+                                    <i class="fas fa-users"></i>
+                                    <span><?= $covoiturage['places_disponibles'] ?> place<?= $covoiturage['places_disponibles'] > 1 ? 's' : '' ?> disponible<?= $covoiturage['places_disponibles'] > 1 ? 's' : '' ?></span>
+                                </div>
+        
+                                <!-- Bouton Voir les passagers (pour le chauffeur) -->
+                                <?php if (isset($_SESSION['user_id']) && $covoiturage['chauffeur_id'] === $_SESSION['user_id']): ?>
+                                    <a href="/covoiturage/<?= $covoiturage['id'] ?>/passagers" class="btn btn-primary mt-3">
+                                        <i class="bi bi-people"></i> Voir les passagers
+                                    </a>
+                                <?php endif; ?>
+                                <hr>
                             </div>
-                            <hr>
-                            <div class="availability d-flex">
-                                <i class="fas fa-users"></i>
-                                <span><?= $covoiturage['places_disponibles'] ?> place<?= $covoiturage['places_disponibles'] > 1 ? 's' : '' ?> disponible<?= $covoiturage['places_disponibles'] > 1 ? 's' : '' ?></span>
-                            </div>
-                            <hr>
-                        </div>
-                        
-                        <!-- Bouton de réservation -->
-                        <?php if (isset($_SESSION['user_id']) && $_SESSION['user_id'] != $covoiturage['chauffeur_id']): ?>
-                            <?php if ($covoiturage['places_disponibles'] > 0 && $covoiturage['statut'] === 'prevu'): ?>
-                                <form method="POST" action="/reservation/creer" class="reservation-form">
-                                    <input type="hidden" name="covoiturage_id" value="<?= $covoiturage['id'] ?>">
-                                    <button type="submit" class="btn btn-primary btn-reserve">
-                                        Réserver ce trajet
-                                    </button>
-                                </form>
+    
+                            <!-- Actions selon le statut -->
+                            <?php if (isset($_SESSION['user_id'])): ?>
+                                <?php if ($_SESSION['user_id'] === $covoiturage['chauffeur_id']): ?>
+                                    <!-- C'EST LE CHAUFFEUR -->
+                                    <div class="owner-notice">
+                                        <i class="fas fa-info-circle"></i>
+                                        C'est votre trajet
+                                    </div>
+            
+                                    <?php elseif ($userReservation): ?>
+                                    <!-- L'UTILISATEUR A DÉJÀ RÉSERVÉ -->
+            
+                                    <?php if ($userReservation['statut'] === 'en_attente'): ?>
+                                        <!-- Réservation en attente -->
+                                        <div class="alert alert-warning mb-3">
+                                            <i class="fas fa-hourglass-half"></i>
+                                            <strong>Réservation en attente</strong><br>
+                                            <small>Votre demande est en attente de confirmation par le conducteur.</small>
+                                        </div>
+                
+                                        <a href="/messagerie/creer/<?= $covoiturage['id'] ?>" class="btn btn-success mb-2">
+                                            <i class="fas fa-comments"></i> Contacter le conducteur
+                                        </a>
+                
+                                        <form method="POST" action="/reservation/annuler" onsubmit="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+                                            <input type="hidden" name="reservation_id" value="<?= $userReservation['id'] ?>">
+                                            <button type="submit" class="btn btn-outline-danger">
+                                                <i class="fas fa-times-circle"></i> Annuler ma réservation
+                                            </button>
+                                        </form>
+                
+                                    <?php elseif ($userReservation['statut'] === 'confirmee'): ?>
+                                        <!-- Réservation confirmée -->
+                                        <div class="alert alert-success mb-3">
+                                            <i class="fas fa-check-circle"></i>
+                                            <strong>Réservation confirmée !</strong><br>
+                                            <small>Votre place est réservée pour ce trajet.</small>
+                                        </div>
+                
+                                        <a href="/messagerie/creer/<?= $covoiturage['id'] ?>" class="btn btn-success mb-2">
+                                            <i class="fas fa-comments"></i> Contacter le conducteur
+                                        </a>
+                
+                                        <form method="POST" action="/reservation/annuler" onsubmit="return confirm('Voulez-vous vraiment annuler cette réservation ?');">
+                                            <input type="hidden" name="reservation_id" value="<?= $userReservation['id'] ?>">
+                                            <button type="submit" class="btn btn-outline-danger">
+                                                <i class="fas fa-times-circle"></i> Annuler ma réservation
+                                            </button>
+                                        </form>
+                
+                                    <?php elseif ($userReservation['statut'] === 'annulee' || $userReservation['statut'] === 'annule'): ?>
+                                        <!-- Réservation annulée -->
+                                        <div class="alert alert-secondary mb-3">
+                                            <i class="fas fa-ban"></i>
+                                            <strong>Réservation annulée</strong><br>
+                                            <small>Cette réservation a été annulée.</small>
+                                        </div>
+                
+                                        <?php if ($covoiturage['places_disponibles'] > 0 && $covoiturage['statut'] === 'prevu'): ?>
+                                            <form method="POST" action="/reservation/creer">
+                                                <input type="hidden" name="covoiturage_id" value="<?= $covoiturage['id'] ?>">
+                                                <button type="submit" class="btn btn-primary">
+                                                    <i class="fas fa-redo"></i> Réserver à nouveau
+                                                </button>
+                                            </form>
+                                        <?php endif; ?>
+                                    <?php endif; ?>
+            
+                                <?php else: ?>
+                                    <!-- L'UTILISATEUR N'A PAS ENCORE RÉSERVÉ -->
+
+                                    <?php if ($covoiturage['places_disponibles'] > 0 && $covoiturage['statut'] === 'prevu'): ?>
+                                        <form method="POST" action="/reservation/creer" class="reservation-form">
+                                            <input type="hidden" name="covoiturage_id" value="<?= $covoiturage['id'] ?>">
+                                            <button type="submit" class="btn btn-primary btn-reserve">
+                                                Réserver ce trajet
+                                            </button>
+                                        </form>
+                                    <?php else: ?>
+                                        <button class="btn btn-disabled" disabled>
+                                            <i class="fas fa-times"></i>
+                                            <?= $covoiturage['statut'] !== 'prevu' ? 'Trajet non disponible' : 'Complet' ?>
+                                        </button>
+                                    <?php endif; ?>
+                                <?php endif; ?>
+        
                             <?php else: ?>
-                                <button class="btn btn-disabled" disabled>
-                                    <i class="fas fa-times"></i>
-                                    <?= $covoiturage['statut'] !== 'prevu' ? 'Trajet non disponible' : 'Complet' ?>
-                                </button>
+                                <!-- NON CONNECTÉ -->
+                                <a href="/connexion" class="btn btn-primary">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                    Se connecter pour réserver
+                                </a>
                             <?php endif; ?>
-                        <?php elseif (!isset($_SESSION['user_id'])): ?>
-                            <a href="/connexion" class="btn btn-primary">
-                                <i class="fas fa-sign-in-alt"></i>
-                                Se connecter pour réserver
-                            </a>
-                        <?php else: ?>
-                            <div class="owner-notice">
-                                <i class="fas fa-info-circle"></i>
-                                C'est votre trajet
-                            </div>
-                        <?php endif; ?>
-                    </div>
+                        </div>
                     <hr>
                     <!-- Informations du véhicule -->
                     <?php if (!empty($covoiturage['marque'])): ?>
@@ -174,17 +257,19 @@ require_once 'app/views/includes/head-header.php';
 
                 <!-- Sidebar droite -->
                 <div class="sidebar">
-                    
                     <!-- Profil du chauffeur -->
                     <div class=" d-flex justify-content-center">
                         <div class="driver-card">
-                            <h3 class="d-flex align-items-center"><i class="fas fa-user"></i> Chauffeur :</h3>
-                            <div class="driver-profile d-flex">
+                            <h3 class="d-flex justify-content-center"><i class="fas fa-user"></i> Chauffeur :</h3>
+                            <div class="driver-profile d-flex justify-content-evenly">
                                 <div class="driver-avatar">
-                                    <?php if (!empty($covoiturage['photo_chauffeur']) && file_exists($covoiturage['photo_chauffeur'])): ?>
-                                        <img src="<?= htmlspecialchars($covoiturage['photo_chauffeur']) ?>" alt="Photo de <?= htmlspecialchars($covoiturage['pseudo_chauffeur']) ?>" class="avatar-img">
+                                    <?php if (!empty($covoiturage['photo_chauffeur'])): ?>
+                                        <img src="/<?= htmlspecialchars($covoiturage['photo_chauffeur']) ?>" 
+                                                alt="Photo de <?= htmlspecialchars($covoiturage['pseudo'] ?? 'Chauffeur') ?>" 
+                                                class="avatar-img">
                                     <?php else: ?>
                                         <div class="avatar-placeholder">
+                                            <?= strtoupper(substr($covoiturage['pseudo'] ?? 'U', 0, 1)) ?>
                                         </div>
                                     <?php endif; ?>
                                 </div>
@@ -202,6 +287,9 @@ require_once 'app/views/includes/head-header.php';
                                         <span><i class="fas fa-route"></i> <?= $covoiturage['nb_trajets_chauffeur'] ?? 'N/A' ?> trajets</span>
                                     </div>
                                 </div>
+                                <a href="/utilisateur/<?= $covoiturage['chauffeur_id'] ?>" class="btn btn-sm btn-outline-primary mt-2 ">
+                                    Voir profil
+                                </a>
                             </div>
                         </div>
                     </div>

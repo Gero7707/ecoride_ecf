@@ -72,7 +72,7 @@ function createMongoIndexes() {
     // Index pour compter les messages non lus
     $messages->createIndex(['conversation_id' => 1, 'read' => 1]);
     
-    echo "✅ Index MongoDB créés avec succès\n";
+    echo "Index MongoDB créés avec succès\n";
 }
 
 // Si ce fichier est exécuté directement (pour créer les index)

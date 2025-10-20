@@ -47,6 +47,9 @@ require_once 'app/views/includes/head-header.php';
                         <div class="flex-grow-1">
                             <h5 class="mb-1">
                                 <?= htmlspecialchars($data['other_user']['pseudo']) ?>
+                                <a href="/utilisateur/<?= $data['other_user']['id'] ?>" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-user"></i> Voir le profil
+                                </a>
                                 <small class="text-muted">
                                     (<?= $data['is_driver'] ? 'Passager' : 'Conducteur' ?>)
                                 </small>

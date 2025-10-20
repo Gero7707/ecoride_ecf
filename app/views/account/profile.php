@@ -168,7 +168,7 @@ require_once 'app/views/includes/head-header.php';
                                     </div>
         
                                     <!-- Boutons d'action -->
-                                    <div class="vehicle-actions">
+                                    <div class="vehicle-actions align-items-center">
                                         <button 
                                             class="btn btn-sm btn-danger delete-vehicle-btn" 
                                             data-vehicle-id="<?= $vehicule['id'] ?>"
@@ -221,7 +221,7 @@ require_once 'app/views/includes/head-header.php';
                                     </div>
                     
                                     <!-- Actions sur le covoiturage -->
-                                    <div class="trip-actions">
+                                    <div class="trip-actions justify-content-center">
                                         <a href="/covoiturage/<?= $covoit['id'] ?>" class="btn btn-outline btn-sm">
                                             <i class="fas fa-eye"></i>
                                             Détails
@@ -285,7 +285,9 @@ require_once 'app/views/includes/head-header.php';
                                             <div class="trip-meta">
                                                 <span><i class="fas fa-calendar-alt"></i> <?= date('d/m/Y', strtotime($reservation['date_depart'])) ?></span>
                                                 <span><i class="fas fa-clock"></i> <?= date('H:i', strtotime($reservation['heure_depart'])) ?></span>
-                                                <span><i class="fas fa-user"></i> Avec <?= htmlspecialchars($reservation['chauffeur_pseudo']) ?></span>
+                                                <span><i class="fas fa-user"></i> Avec <?= htmlspecialchars($reservation['chauffeur_pseudo']) ?>
+                                                <a href="/messagerie/creer/<?= $reservation['covoiturage_id'] ?>" class="btn btn-success mb-2 messagerie-btn">
+                                            <i class="fas fa-comments"></i></a></span>
                                                 <span><i class="fas fa-euro-sign"></i> <?= $reservation['prix'] ?>€</span>
                                             </div>
                                             <?php if (!empty($reservation['marque']) && !empty($reservation['modele'])): ?>

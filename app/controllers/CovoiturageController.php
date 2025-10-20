@@ -65,7 +65,6 @@ class CovoiturageController {
         // Inclure la vue avec les données
         include 'app/views/covoiturage/search.php';
     }
-    
     /**
      * Afficher les détails d'un covoiturage
      */
@@ -80,6 +79,12 @@ class CovoiturageController {
         
         // Récupérer les avis du chauffeur
         $avis_chauffeur = $this->covoiturageModel->getDriverReviews($covoiturage['chauffeur_id']);
+        
+        // Vérifier si l'utilisateur connecté a déjà réservé ce trajet
+        $userReservation = null;
+        if (isset($_SESSION['user_id'])) {
+            $userReservation = $this->covoiturageModel->getUserReservation($id, $_SESSION['user_id']);
+        }
         
         // Inclure la vue détails
         include 'app/views/covoiturage/details.php';
@@ -134,6 +139,9 @@ class CovoiturageController {
         $prix = floatval($_POST['prix'] ?? 0);
         $places_disponibles = intval($_POST['places_disponibles'] ?? 1);
         $vehicule_id = intval($_POST['vehicule_id'] ?? 0);
+
+        $reservation_type = $_POST['reservation_type'] ?? 'instant';
+        $confirmation_requise = ($reservation_type === 'confirmation') ? 1 : 0;
         
         // Validation des données
         $errors = [];
@@ -167,7 +175,8 @@ class CovoiturageController {
             $heure_depart,
             $heure_arrivee,
             $prix,
-            $places_disponibles
+            $places_disponibles,
+            $confirmation_requise
         );
         
         if ($result['success']) {
@@ -295,6 +304,127 @@ class CovoiturageController {
             header('Location: /profil');
             exit();
         }
+    }
+
+        /**
+     * Afficher les passagers d'un covoiturage (pour le chauffeur)
+     */
+    public function showPassengers($covoiturageId) {
+        // Vérifier que l'utilisateur est connecté
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté';
+            header('Location: /connexion');
+            exit();
+        }
+
+        // Récupérer le trajet
+        $stmt = $this->pdo->prepare("
+            SELECT * FROM covoiturage WHERE id = ?
+        ");
+        $stmt->execute([$covoiturageId]);
+        $covoiturage = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        if (!$covoiturage) {
+            $_SESSION['error'] = 'Trajet introuvable';
+            header('Location: /covoiturages');
+            exit();
+        }
+
+        // SÉCURITÉ : Vérifier que c'est bien le chauffeur
+        if ($covoiturage['chauffeur_id'] !== $_SESSION['user_id']) {
+            $_SESSION['error'] = 'Vous n\'êtes pas autorisé à voir ces informations';
+            header('Location: /covoiturage/' . $covoiturageId);
+            exit();
+        }
+
+        // Récupérer les passagers avec leurs réservations
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                r.*,
+                u.id as user_id,
+                u.pseudo,
+                u.photo,
+                u.telephone,
+                COALESCE(AVG(a.note), 0) as note_moyenne,
+                COUNT(a.id) as nombre_avis
+            FROM reservation r
+            JOIN utilisateur u ON r.passager_id = u.id
+            LEFT JOIN avis a ON a.evalue_id = u.id AND a.valide = 1
+            WHERE r.covoiturage_id = ?
+            GROUP BY r.id, u.id
+            ORDER BY r.date_reservation DESC
+        ");
+        $stmt->execute([$covoiturageId]);
+        $passagers = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+        // Passer les données à la vue
+        $data = [
+            'covoiturage' => $covoiturage,
+            'passagers' => $passagers
+        ];
+
+        include 'app/views/covoiturage/passagers.php';
+    }
+
+    /**
+     * Afficher tous mes covoiturages
+     */
+    public function mesCovoiturages() {
+        // Vérifier que l'utilisateur est connecté et chauffeur
+        if (!isset($_SESSION['user_id'])) {
+            $_SESSION['error'] = 'Vous devez être connecté';
+            header('Location: /connexion');
+            exit();
+        }
+        
+        if ($_SESSION['user_statut'] !== 'chauffeur' && $_SESSION['user_statut'] !== 'admin') {
+            $_SESSION['error'] = 'Vous devez être chauffeur';
+            header('Location: /profil');
+            exit();
+        }
+        
+        $userId = $_SESSION['user_id'];
+        
+        // Récupérer tous les covoiturages du chauffeur avec statistiques
+        $stmt = $this->pdo->prepare("
+            SELECT 
+                c.*,
+                v.marque,
+                v.modele,
+                v.couleur,
+                COUNT(DISTINCT r.id) as nb_reservations,
+                COUNT(DISTINCT CASE WHEN r.statut = 'en_attente' THEN r.id END) as nb_en_attente,
+                COUNT(DISTINCT CASE WHEN r.statut = 'confirmee' THEN r.id END) as nb_confirmees
+            FROM covoiturage c
+            LEFT JOIN vehicule v ON c.vehicule_id = v.id
+            LEFT JOIN reservation r ON c.id = r.covoiturage_id AND r.statut IN ('en_attente', 'confirmee')
+            WHERE c.chauffeur_id = ?
+            GROUP BY c.id
+            ORDER BY c.date_depart DESC, c.heure_depart DESC
+        ");
+        $stmt->execute([$userId]);
+        $covoiturages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Grouper par statut
+        $groupes = [
+            'prevu' => [],
+            'en_cours' => [],
+            'termine' => [],
+            'annule' => []
+        ];
+        
+        foreach ($covoiturages as $covoiturage) {
+            $groupes[$covoiturage['statut']][] = $covoiturage;
+        }
+        
+        // Passer à la vue
+        $data = [
+            'covoiturages' => $covoiturages,
+            'groupes' => $groupes,
+            'total' => count($covoiturages)
+        ];
+        
+        include 'app/views/covoiturage/mes-covoiturages.php';
     }
 }
 ?>
