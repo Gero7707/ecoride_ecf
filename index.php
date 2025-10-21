@@ -67,6 +67,16 @@ switch ($path) {
             $accountController->showEditProfile();
         }
         break;
+
+    case '/mes-avis':
+        // Page de tous les avis
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+        $accountController = new AccountController($pdo);
+        $accountController->showAllReviews();
+        break;
         
     case (preg_match('/^\/covoiturage\/(\d+)$/', $path, $matches) ? true : false):
         // Page détail d'un covoiturage

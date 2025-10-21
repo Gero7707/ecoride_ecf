@@ -8,15 +8,15 @@ require_once 'app/views/includes/head-header.php';
         <!-- En-tête -->
         <div class="row mb-4">
             <div class="col-12">
-                <div class="d-flex justify-content-between align-items-center">
+                <div class="d-flex justify-content-between align-items-center flex-column">
                     <div>
                         <h2>
                             <i class="fas fa-car"></i> Mes covoiturages
                             <span class="badge bg-primary"><?= $data['total'] ?></span>
                         </h2>
-                        <p class="text-muted mb-0">Gérez tous vos trajets</p>
+                        <p class="text-muted text-center mb-0">Gérez tous vos trajets</p>
                     </div>
-                    <a href="/covoiturage/creer" class="btn btn-success">
+                    <a href="/covoiturage/creer" class="btn btn-success mt-4">
                         <i class="fas fa-plus"></i> Créer un trajet
                     </a>
                 </div>

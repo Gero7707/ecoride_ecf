@@ -170,12 +170,17 @@ require_once 'app/views/includes/head-header.php';
                                         </div>
                 
                                         <?php if ($covoiturage['places_disponibles'] > 0 && $covoiturage['statut'] === 'prevu'): ?>
-                                            <form method="POST" action="/reservation/creer">
+                                            <form method="POST" action="/reservation/creer" id="reservationForm">
                                                 <input type="hidden" name="covoiturage_id" value="<?= $covoiturage['id'] ?>">
-                                                <button type="submit" class="btn btn-primary">
-                                                    <i class="fas fa-redo"></i> Réserver à nouveau
+                                                <button type="button" class="btn btn-primary btn-reserve" data-bs-toggle="modal" data-bs-target="#confirmationModal">
+                                                    <i class="fas fa-ticket-alt"></i> Réserver ce trajet
                                                 </button>
                                             </form>
+                                        <?php else: ?>
+                                            <button class="btn btn-disabled" disabled>
+                                                <i class="fas fa-times"></i>
+                                                <?= $covoiturage['statut'] !== 'prevu' ? 'Trajet non disponible' : 'Complet' ?>
+                                            </button>
                                         <?php endif; ?>
                                     <?php endif; ?>
             
@@ -287,9 +292,7 @@ require_once 'app/views/includes/head-header.php';
                                         <span><i class="fas fa-route"></i> <?= $covoiturage['nb_trajets_chauffeur'] ?? 'N/A' ?> trajets</span>
                                     </div>
                                 </div>
-                                <a href="/utilisateur/<?= $covoiturage['chauffeur_id'] ?>" class="btn btn-sm btn-outline-primary mt-2 ">
-                                    Voir profil
-                                </a>
+                                <a href="/utilisateur/<?= $covoiturage['chauffeur_id'] ?>" class="btn btn-sm btn-outline-primary ">Profil</a>
                             </div>
                         </div>
                     </div>
@@ -367,6 +370,109 @@ require_once 'app/views/includes/head-header.php';
             </div>
         </div>
     </section>
+
+    <!-- Modale de confirmation de réservation -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="confirmationModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="confirmationModalLabel">
+                        <i class="fas fa-check-circle"></i> Confirmer la réservation
+                    </h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Fermer"></button>
+                </div>
+                            
+                <div class="modal-body">
+                    <div class="reservation-summary">
+                        <!-- Trajet -->
+                        <div class="summary-item mb-3">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-route"></i> Trajet
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <strong><?= htmlspecialchars($covoiturage['ville_depart']) ?></strong>
+                                <i class="fas fa-arrow-right mx-2 text-primary"></i>
+                                <strong><?= htmlspecialchars($covoiturage['ville_arrivee']) ?></strong>
+                            </div>
+                        </div>
+
+                        <!-- Date et heure -->
+                        <div class="summary-item mb-3">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-calendar-alt"></i> Date et heure
+                            </h6>
+                            <div>
+                                <?= date('d/m/Y', strtotime($covoiturage['date_depart'])) ?> 
+                                à <?= date('H:i', strtotime($covoiturage['heure_depart'])) ?>
+                            </div>
+                        </div>
+
+                        <!-- Chauffeur -->
+                        <div class="summary-item mb-3">
+                            <h6 class="text-muted mb-2">
+                                <i class="fas fa-user"></i> Chauffeur
+                            </h6>
+                            <div class="d-flex align-items-center">
+                                <?php if (!empty($covoiturage['photo_chauffeur'])): ?>
+                                    <img src="/<?= htmlspecialchars($covoiturage['photo_chauffeur']) ?>" 
+                                         alt="<?= htmlspecialchars($covoiturage['pseudo']) ?>"
+                                         class="rounded-circle me-2"
+                                         style="width: 40px; height: 40px; object-fit: cover;">
+                                <?php else: ?>
+                                    <div class="rounded-circle bg-secondary text-white me-2 d-flex align-items-center justify-content-center" 
+                                         style="width: 40px; height: 40px;">
+                                        <?= strtoupper(substr($covoiturage['pseudo'] ?? 'U', 0, 1)) ?>
+                                    </div>
+                                <?php endif; ?>
+                                <strong><?= htmlspecialchars($covoiturage['pseudo']) ?></strong>
+                                <?php if (isset($covoiturage['note_moyenne']) && $covoiturage['note_moyenne'] > 0): ?>
+                                    <span class="ms-2 text-warning">
+                                        <i class="fas fa-star"></i> <?= number_format($covoiturage['note_moyenne'], 1) ?>
+                                    </span>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+
+                        <!-- Prix -->
+                        <div class="summary-item mb-3 p-3 bg-light rounded">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <h6 class="mb-0">
+                                    <i class="fas fa-euro-sign"></i> Prix
+                                </h6>
+                                <strong class="h5 mb-0 text-primary">
+                                    <?= number_format($covoiturage['prix'], 2, ',', ' ') ?> €
+                                </strong>
+                            </div>
+                        </div>
+
+                        <!-- Type de réservation -->
+                        <?php if ($covoiturage['confirmation_requise']): ?>
+                            <div class="alert alert-info mb-0">
+                                <i class="fas fa-info-circle"></i>
+                                <strong>Réservation avec confirmation</strong><br>
+                                <small>Le chauffeur devra confirmer votre demande avant validation.</small>
+                            </div>
+                        <?php else: ?>
+                            <div class="alert alert-success mb-0">
+                                <i class="fas fa-bolt"></i>
+                                <strong>Réservation instantanée</strong><br>
+                                <small>Votre place sera confirmée immédiatement.</small>
+                            </div>
+                        <?php endif; ?>
+                    </div>
+                </div>
+                        
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                        <i class="fas fa-times"></i> Annuler
+                    </button>
+                    <button type="button" class="btn btn-primary" id="confirmReservationBtn">
+                        <i class="fas fa-check"></i> Confirmer la réservation
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 </main>
 <?php
 $pageSpecificJs = 'covoiturage.js';

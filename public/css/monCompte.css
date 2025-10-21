@@ -33,6 +33,9 @@ nav , footer  {
     box-shadow: 0 2px 5px rgba(0,0,0,0.1);
 }
 
+.nav-link {
+    padding: 0.5em;
+}
 .section-header a{
     margin-left: 1em;
 }
@@ -68,6 +71,7 @@ nav , footer  {
     font-size: 1.8rem;
     font-weight: bold;
 }
+
 
 #notification-badge {
     font-size: 0.65rem;
@@ -127,7 +131,7 @@ nav , footer  {
     color: #4ebaf0;
 }
 
-.fa-calendar-alt, .fa-gas-pump, .fa-info-circle, .fa-palette,.fa-map-marked-alt,.fa-smoking-ban{
+.fa-calendar-alt, .fa-gas-pump, .fa-info-circle, .fa-palette,.fa-map-marked-alt,.fa-smoking-ban,.fa-calendar{
     font-size: 1.5rem;
     color: #de4343;
 }
@@ -391,6 +395,32 @@ footer a:hover {
     color: #6c757d;
 }
 
+/* Page Mes Avis */
+.rating-badge-lg {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    padding: 1rem 1.5rem;
+    border-radius: 15px;
+    font-size: 1.2rem;
+}
+
+.rating-display {
+    font-size: 1.2rem;
+}
+
+.comment-box {
+    line-height: 1.6;
+    font-style: italic;
+}
+
+.avis-list .card {
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.avis-list .card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+}
 
 
 @media (max-width: 768px) {

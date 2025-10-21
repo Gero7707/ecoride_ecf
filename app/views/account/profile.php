@@ -200,7 +200,7 @@ require_once 'app/views/includes/head-header.php';
                     <hr>
                     <div class="section-content">
                         <?php if (!empty($mes_covoiturages)): ?>
-                            <?php foreach (array_slice($mes_covoiturages, 0, 5) as $covoit): ?>
+                            <?php foreach (array_slice($mes_covoiturages, 0, 3) as $covoit): ?>
                                 <div class="trip-card">
                                     <div class="trip-route">
                                         <div class="route-info">
@@ -277,7 +277,7 @@ require_once 'app/views/includes/head-header.php';
                     <hr>
                     <div class="section-content">
                         <?php if (!empty($mes_reservations)): ?>
-                            <?php foreach (array_slice($mes_reservations, 0, 5) as $reservation): ?>
+                            <?php foreach (array_slice($mes_reservations, 0, 3) as $reservation): ?>
                                 <div class="trip-card">
                                     <div class="trip-route">
                                         <div class="route-info">
@@ -339,7 +339,7 @@ require_once 'app/views/includes/head-header.php';
                                     <hr>
                                 </div>
                             <?php endforeach; ?>
-                            <?php if (count($mes_reservations) > 5): ?>
+                            <?php if (count($mes_reservations) > 3): ?>
                                 <div class="show-more">
                                     <a href="/mes-reservations" class="btn btn-outline">Voir toutes mes réservations</a>
                                 </div>

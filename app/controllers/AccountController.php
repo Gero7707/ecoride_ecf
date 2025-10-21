@@ -495,5 +495,106 @@ private function formatBytes($bytes, $precision = 2) {
         header('Location: /mon-compte');
         exit();
     }
+
+    /**
+ * Afficher tous les avis (reçus ou donnés)
+ */
+    public function showAllReviews() {
+        if (!isset($_SESSION['user_id'])) {
+            header('Location: /connexion');
+            exit();
+        }
+        
+        $userId = $_SESSION['user_id'];
+        
+        // Récupérer le statut de l'utilisateur
+        $stmt = $this->pdo->prepare("SELECT statut FROM utilisateur WHERE id = ?");
+        $stmt->execute([$userId]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        
+        if (!$user) {
+            header('Location: /connexion');
+            exit();
+        }
+        
+        // Filtre optionnel par note
+        $noteFilter = isset($_GET['note']) && !empty($_GET['note']) ? intval($_GET['note']) : null;
+        
+        // Requête selon le statut
+        if ($user['statut'] === 'chauffeur' || $user['statut'] === 'admin') {
+            // Avis REÇUS par le chauffeur
+            $sql = "SELECT 
+                        a.*,
+                        u.pseudo as evaluateur_pseudo,
+                        c.ville_depart,
+                        c.ville_arrivee,
+                        c.date_depart
+                    FROM avis a
+                    JOIN utilisateur u ON a.evaluateur_id = u.id
+                    JOIN covoiturage c ON a.covoiturage_id = c.id
+                    WHERE a.evalue_id = ? AND a.valide = 1";
+            
+            if ($noteFilter) {
+                $sql .= " AND a.note = ?";
+            }
+            
+            $sql .= " ORDER BY a.date_creation DESC";
+            
+            $stmt = $this->pdo->prepare($sql);
+            if ($noteFilter) {
+                $stmt->execute([$userId, $noteFilter]);
+            } else {
+                $stmt->execute([$userId]);
+            }
+        } else {
+            // Avis DONNÉS par le passager
+            $sql = "SELECT 
+                        a.*,
+                        u.pseudo as evalue_pseudo,
+                        c.ville_depart,
+                        c.ville_arrivee,
+                        c.date_depart
+                    FROM avis a
+                    JOIN utilisateur u ON a.evalue_id = u.id
+                    JOIN covoiturage c ON a.covoiturage_id = c.id
+                    WHERE a.evaluateur_id = ? AND a.valide = 1";
+            
+            if ($noteFilter) {
+                $sql .= " AND a.note = ?";
+            }
+            
+            $sql .= " ORDER BY a.date_creation DESC";
+            
+            $stmt = $this->pdo->prepare($sql);
+            if ($noteFilter) {
+                $stmt->execute([$userId, $noteFilter]);
+            } else {
+                $stmt->execute([$userId]);
+            }
+        }
+        
+        $avis = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        
+        // Calculer les statistiques
+        $stmtStats = $this->pdo->prepare("
+            SELECT 
+                COALESCE(AVG(note), 0) as note_moyenne,
+                COUNT(*) as nb_avis
+            FROM avis
+            WHERE " . ($user['statut'] === 'chauffeur' ? "evalue_id" : "evaluateur_id") . " = ?
+            AND valide = 1
+        ");
+        $stmtStats->execute([$userId]);
+        $stats = $stmtStats->fetch(PDO::FETCH_ASSOC);
+        
+        // Passer les données à la vue
+        $data = [
+            'avis' => $avis,
+            'stats' => $stats,
+            'user_statut' => $user['statut']
+        ];
+        
+        include 'app/views/account/mes-avis.php';
+    }
 }
 ?>

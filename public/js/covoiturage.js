@@ -72,4 +72,19 @@ document.addEventListener('DOMContentLoaded', function() {
     if (calculateButton) {
         calculateButton.addEventListener('click', calculatePrice);
     }
+
+    //Modal de confirmation de réservation
+    const confirmBtn = document.getElementById('confirmReservationBtn');
+    const reservationForm = document.getElementById('reservationForm');
+    
+    if (confirmBtn && reservationForm) {
+        confirmBtn.addEventListener('click', function() {
+            // Désactiver le bouton pour éviter les doubles clics
+            confirmBtn.disabled = true;
+            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Réservation en cours...';
+            
+            // Soumettre le formulaire
+            reservationForm.submit();
+        });
+    }
 });
