@@ -7,6 +7,19 @@
 // Démarrage de la session
 session_start();
 
+// Afficher les erreurs pour debug (à retirer après)
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
+// Détecter l'environnement Railway
+if (getenv('RAILWAY_ENVIRONMENT') || getenv('MYSQLHOST')) {
+    // Sur Railway
+    require_once 'config/database-railway.php';
+} else {
+    // En local
+    require_once 'config/database.php';
+}
+
 // Chargement de la configuration
 require_once 'config/database.php';
 require_once 'app/controllers/AuthController.php';
