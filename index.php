@@ -7,21 +7,25 @@
 // Démarrage de la session
 session_start();
 
-// Afficher les erreurs pour debug (à retirer après)
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// Configuration MySQL LOCALHOST
+$host = 'localhost';  // ou '127.0.0.1'
+$port = '3306';
+$user = 'root';  // ton utilisateur MySQL local
+$password = '';  // ton mot de passe MySQL local (souvent vide avec XAMPP/WAMP)
+$database = 'ecoride';  // nom de ta base locale
 
-// Détecter l'environnement Railway
-if (getenv('RAILWAY_ENVIRONMENT') || getenv('MYSQLHOST')) {
-    // Sur Railway
-    require_once 'config/database-railway.php';
-} else {
-    // En local
-    require_once 'config/database.php';
+try {
+    $dsn = "mysql:host=$host;port=$port;dbname=$database;charset=utf8mb4";
+    $pdo = new PDO($dsn, $user, $password, [
+        PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+        PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC
+    ]);
+} catch (PDOException $e) {
+    die("❌ Erreur de connexion : " . $e->getMessage());
 }
 
 // Chargement de la configuration
-require_once 'config/database.php';
+// require_once 'config/database.php';
 require_once 'app/controllers/AuthController.php';
 require_once 'app/controllers/CovoiturageController.php';
 require_once 'app/controllers/AccountController.php';
